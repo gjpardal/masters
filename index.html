@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masters Servers</title>
-  <link rel="icon" href="https://www.dropbox.com/scl/fi/mxuygew1g8z4ftwsrw2x8/LOGO.png?rlkey=8331nybscso6xygymtiktbhwz&raw=1">
+  <link rel="icon" href="https://i.ibb.co/PsnxFTWW/LOGO.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .card{background-color:rgba(24,24,27,.70);border:1px solid rgba(63,63,70,.8);}
+    .card{background-color:rgba(24,24,27,.70);border:1px solid rgba(63,63,70,.8);} 
+    .backdrop{background:rgba(0,0,0,.65)}
   </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100">
@@ -16,12 +17,12 @@
       <!-- HEADER -->
       <header class="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-zinc-950/80 sticky top-0">
         <div class="flex items-center gap-3">
-          <img src="https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1" class="h-10 w-auto" alt="Masters logo" />
+          <img src="https://i.ibb.co/xtgzTcVZ/logo-menor.png" class="h-10 w-auto" alt="Masters logo" />
           <span class="font-semibold text-lg">Masters</span>
         </div>
         <nav class="hidden md:flex gap-4 text-sm">
-          <a href="#servers" class="hover:text-emerald-400" data-i18n="navServers">Servers</a>
-          <a href="#rules" class="hover:text-emerald-400" data-i18n="navRules">Rules</a>
+          <a href="#servers" class="hover:text-emerald-400" data-i18n="navServers">Servidores</a>
+          <a href="#rules" class="hover:text-emerald-400" data-i18n="navRules">Regras</a>
           <a href="#staff" class="hover:text-emerald-400" data-i18n="navStaff">Staff</a>
           <a href="#discord" class="hover:text-emerald-400" data-i18n="navDiscord">Discord</a>
         </nav>
@@ -37,164 +38,204 @@
 
       <!-- HERO -->
       <section class="text-center py-16 md:py-20">
-        <img src="https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1" class="mx-auto h-48 md:h-64 mb-6" alt="Masters" />
-        <h1 class="text-5xl font-extrabold mb-4">Masters</h1>
-        <p class="max-w-2xl mx-auto text-zinc-300" data-i18n="tagline">Friendly PVE server with exclusive legendary weapons, epic tools that level up as you use them, and tons of events.</p>
+        <img src="https://i.ibb.co/qMM5FSY1/Cabe-a.png" class="mx-auto h-56 md:h-72 mb-5" alt="Masters" />
+        <p id="heroText" class="max-w-3xl mx-auto text-base md:text-lg text-white leading-relaxed px-4"></p>
       </section>
 
       <!-- SERVERS -->
-      <section id="servers" class="py-16 px-6 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 7h16M4 12h16M4 17h16'/></svg> <span data-i18n="serversTitle">Servers</span></h2>
+      <section id="servers" class="py-12 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 7h16M4 12h16M4 17h16'/></svg> <span data-i18n="serversTitle">Servidores</span></h2>
 
-        <div class="grid md:grid-cols-2 gap-6" id="serverGrid">
-          <!-- Cards gerados por JS com i18n -->
-        </div>
+        <div class="grid md:grid-cols-2 gap-6" id="serverGrid"></div>
       </section>
 
       <!-- RULES -->
       <section id="rules" class="py-16 px-6 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3'/></svg> <span data-i18n="rulesTitle">General Rules</span></h2>
+        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3'/></svg> <span data-i18n="rulesTitle">Regras</span></h2>
         <div class="grid md:grid-cols-2 gap-6" id="rulesGrid"></div>
       </section>
 
-      <!-- STAFF -->
+      <!-- STAFF (mantido) -->
       <section id="staff" class="py-16 px-6 text-center">
         <h2 class="text-3xl font-bold mb-8">Staff</h2>
         <div class="max-w-md mx-auto bg-zinc-900/70 border border-zinc-800 rounded-xl p-8 shadow-xl">
-          <img src="https://www.dropbox.com/scl/fi/mxuygew1g8z4ftwsrw2x8/LOGO.png?rlkey=8331nybscso6xygymtiktbhwz&raw=1" class="mx-auto mb-6 h-28 w-28 rounded-full border-4 border-emerald-500 shadow-emerald-600/40 shadow-xl" />
+          <img src="https://i.ibb.co/PsnxFTWW/LOGO.png" class="mx-auto mb-6 h-28 w-28 rounded-full border-4 border-emerald-500 shadow-emerald-600/40 shadow-xl" />
           <h3 class="text-xl font-bold mb-2 text-emerald-400">MestrePardal</h3>
           <p class="text-zinc-400 text-sm mb-6">Owner / Dev</p>
           <div class="flex justify-center gap-8 text-sm">
-            <a href="https://steamcommunity.com/profiles/76561199834841239" target="_blank" class="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition">
-              <img src="https://cdn-icons-png.flaticon.com/512/5969/5969282.png" class="h-6 w-6" /> Steam
-            </a>
-            <a href="https://youtube.com/mestrepardal" target="_blank" class="flex items-center gap-2 text-red-500 hover:text-red-400 font-semibold transition">
-              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="h-6 w-6" /> YouTube
-            </a>
-            <a href="https://twitch.tv/mestre_pardal" target="_blank" class="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-semibold transition">
-              <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" class="h-6 w-6" /> Twitch
-            </a>
+            <a href="https://steamcommunity.com/profiles/76561199834841239" target="_blank" class="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/5969/5969282.png" class="h-6 w-6" /> Steam</a>
+            <a href="https://youtube.com/mestrepardal" target="_blank" class="flex items-center gap-2 text-red-500 hover:text-red-400 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="h-6 w-6" /> YouTube</a>
+            <a href="https://twitch.tv/mestre_pardal" target="_blank" class="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" class="h-6 w-6" /> Twitch</a>
           </div>
         </div>
       </section>
+
+      <!-- DISCORD (mantido) -->
       <section id="discord" class="py-16 px-6 text-center">
         <h2 class="text-3xl font-bold mb-4">Junte-se à comunidade</h2>
         <p class="text-zinc-300 mb-6">Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.</p>
         <a href="https://discord.gg/the-masters" target="_blank" class="bg-emerald-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600">Entrar no Discord</a>
       </section>
 
-      <footer class="border-t border-zinc-800 py-8 text-center text-zinc-400 text-sm">
-        © 2025 Masters. Not affiliated with Facepunch.
-      </footer>
+      <footer class="border-t border-zinc-800 py-8 text-center text-zinc-400 text-sm">© 2025 Masters. Not affiliated with Facepunch.</footer>
+    </div>
+  </div>
+
+  <!-- MODAL INFO -->
+  <div id="infoModal" class="fixed inset-0 hidden items-center justify-center z-50">
+    <div class="absolute inset-0 backdrop" onclick="closeModal()"></div>
+    <div class="relative bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl w-[min(95vw,860px)]">
+      <button class="absolute top-3 right-3 bg-zinc-800/70 hover:bg-zinc-700 rounded-md px-3 py-1 text-sm" onclick="closeModal()">✕</button>
+      <img id="modalImg" src="" class="w-full h-72 object-cover rounded-t-xl" alt="banner" />
+      <div class="p-5">
+        <div class="flex items-center justify-between mb-2">
+          <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+          <span id="playerCount" class="text-sm text-zinc-400"></span>
+        </div>
+        <p id="modalSub" class="text-zinc-400 mb-4"></p>
+        <ul id="modalList" class="list-disc list-inside space-y-1 text-zinc-200 mb-5"></ul>
+        <div class="flex gap-3 justify-end">
+          <a id="modalBM" target="_blank" class="inline-flex items-center gap-2 bg-rose-500 hover:bg-rose-600 text-white font-semibold px-4 py-2 rounded-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M7 7h10v10H7z"/></svg>
+            BattleMetrics
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const BRAND_LOGO = "https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1";
-
+    // --- DATA ---
     const SERVERS = [
-      { name: "BR LATAM - Masters 2X PVE", ip: "177.138.84.236:28015", store: "https://themasters.craftingstore.net/", map: "Procedural | 4k", tier: "2x" },
-      { name: "BR LATAM - Masters 10X PVE", ip: "201.46.47.98:28015",   store: "https://10xmasters.craftingstore.net/", map: "Procedural | 3.5k", tier: "10x" },
-      { name: "EU - Masters 2X PVE",       ip: "185.29.166.231:10001",  store: "https://eumasters.craftingstore.net/",  map: "Procedural | 4k", tier: "2x" },
-      { name: "EU - Masters 10X PVE",      ip: "151.242.106.72:10025",  store: "https://10xmasterseu.craftingstore.net/", map: "Procedural | 3k", tier: "10x" },
+      { name: "BR LATAM - Masters 2X PVE", ip: "177.138.84.236:28015", bmId:"33357999", store: "https://themasters.craftingstore.net/", tier: "2x", banner:"https://i.ibb.co/9mmRHjmT/Banner-PVE.png" },
+      { name: "BR LATAM - Masters 10X PVE", ip: "201.46.47.98:28015",   bmId:"35943504", store: "https://10xmasters.craftingstore.net/", tier: "10x", banner:"https://i.ibb.co/NdN2gf02/10xBR.png" },
+      { name: "EU - Masters 2X PVE",       ip: "185.29.166.231:10001",  bmId:"36071340", store: "https://eumasters.craftingstore.net/",  tier: "2x", banner:"https://i.ibb.co/9mmRHjmT/Banner-PVE.png" },
+      { name: "EU - Masters 10X PVE",      ip: "151.242.106.72:10025",  bmId:"35945743", store: "https://10xmasterseu.craftingstore.net/", tier: "10x", banner:"https://i.ibb.co/DPPDRyzS/10x-Europe.png" },
     ];
 
     const I18N = {
       en: {
         navServers:"Servers", navRules:"Rules", navStaff:"Staff", navDiscord:"Discord",
-        tagline:"Friendly PVE server with exclusive legendary weapons, epic tools that level up as you use them, and tons of events.",
-        serversTitle:"Servers", rulesTitle:"General Rules", staffTitle:"Staff",
-        discordTitle:"Join the community", discordText:"Ask questions, read announcements and events, join giveaways, and talk to the staff.", discordBtn:"Join Discord",
-        mapLabel:"Procedural", copy:"Copy connect", shop:"Open store", copyAlert:"Copied! Open Rust and paste in F1.",
+        tagline:"Friendly PVE servers with legendary weapons, epic tools that level up as you use them, smart economy and 24/7 dynamic events.",
+        serversTitle:"Servers", rulesTitle:"General Rules",
+        copy:"Copy connect", shop:"SHOP", copyAlert:"Copied! Open Rust and paste in F1.", info:"INFO", customMap:"Custom Map",
         feats2x:["2X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         feats10x:["10X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         rules:[
-          "Do not abuse bugs. If you find one, tell the admins.",
-          "New players are always welcome.",
-          "Racism or insults = BAN.",
-          "Cheat/Macro = BAN.",
-          "Killing people with bug/crush = BAN.",
-          "Any issue: open a ticket on our Discord.",
-        ],
+          "Do not abuse bugs — report them to admins.",
+          "Be kind to new players.",
+          "Racism or harassment = BAN.",
+          "Cheat/Macro/Script = BAN.",
+          "Killing using exploits = BAN.",
+          "Need help? Open a ticket on Discord."
+        ]
       },
       es: {
         navServers:"Servidores", navRules:"Reglas", navStaff:"Staff", navDiscord:"Discord",
-        tagline:"Servidor PVE amigable, con armas legendarias exclusivas, herramientas épicas que mejoran con el uso y muchos eventos para divertirse.",
-        serversTitle:"Servidores", rulesTitle:"Reglas Generales", staffTitle:"Staff",
-        discordTitle:"Únete a la comunidad", discordText:"Resuelve dudas, mira anuncios y eventos, participa en sorteos y habla con el staff.", discordBtn:"Entrar al Discord",
-        mapLabel:"Procedural", copy:"Copiar connect", shop:"Abrir tienda", copyAlert:"¡Copiado! Abre Rust y pega en F1.",
+        tagline:"Servidores PVE amigables, con armas legendarias, herramientas épicas que progresan con el uso, economía inteligente y eventos dinámicos 24/7.",
+        serversTitle:"Servidores", rulesTitle:"Reglas Generales",
+        copy:"Copiar connect", shop:"TIENDA", copyAlert:"¡Copiado! Abre Rust y pega en F1.", info:"INFO", customMap:"Mapa Personalizado",
         feats2x:["2X Recursos y farmeo","Herramientas/Plugins aumentan el farmeo","Moneda del juego MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         feats10x:["10X Recursos y farmeo","Herramientas/Plugins aumentan el farmeo","Moneda del juego MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         rules:[
-          "No abuses BUGS. Si encuentras uno, avisa al ADM.",
-          "Nuevos jugadores siempre bienvenidos.",
+          "No abuses de bugs — repórtalos a los admins.",
+          "Da la bienvenida a los nuevos jugadores.",
           "Racismo u ofensas = BAN.",
-          "Cheat/Macro = BAN.",
-          "Matar con bug/aplastados = BAN.",
-          "Cualquier problema: abre un ticket en Discord.",
-        ],
+          "Cheat/Macro/Script = BAN.",
+          "Matar usando exploits = BAN.",
+          "¿Problemas? Abre un ticket en Discord."
+        ]
       },
       pt: {
         navServers:"Servidores", navRules:"Regras", navStaff:"Staff", navDiscord:"Discord",
-        tagline:"Servidor PVE amigável, com várias armas lendárias exclusivas, ferramentas épicas que melhoram conforme o uso e muitos eventos para se divertir.",
-        serversTitle:"Servidores", rulesTitle:"Regras", staffTitle:"Staff",
-        discordTitle:"Junte-se à comunidade", discordText:"Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.", discordBtn:"Entrar no Discord",
-        mapLabel:"Procedural", copy:"Copiar connect", shop:"Abrir loja", copyAlert:"Comando copiado! Abra o Rust e cole no F1.",
+        tagline:"Servidores PVE otimizados com armas lendárias, ferramentas épicas com progressão, economia inteligente e eventos dinâmicos 24/7.",
+        serversTitle:"Servidores", rulesTitle:"Regras",
+        copy:"Copiar connect", shop:"Abrir loja", copyAlert:"Comando copiado! Abra o Rust e cole no F1.", info:"INFO", customMap:"Mapa Custom",
         feats2x:["2X Farms e Recursos","Ferramentas e Plugins Aumentam o Farm","Moeda no Jogo MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         feats10x:["10X Farms e Recursos","Ferramentas e Plugins Aumentam o Farm","Moeda no Jogo MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         rules:[
-          "Não abuse de BUGS. Caso encontre, avise o ADM.",
-          "Novos Players sempre serão Bem-Vindos.",
-          "Racismo ou ofensas = BAN.",
-          "Cheat/Macro = BAN.",
-          "Matar pessoas com bug/esmagadas = BAN.",
-          "Qualquer problema: abra um Ticket no nosso Discord.",
-        ],
-      },
+          "Não abuse de BUGS — encontrou? Avise um ADM.",
+          "Ajude os novos players — são bem-vindos!",
+          "Racismo, preconceito ou ofensas = BAN.",
+          "Cheat/Macro/Script = BAN.",
+          "Matar usando exploit/bug = BAN.",
+          "Precisa de ajuda? Abra um ticket no Discord."
+        ]
+      }
     };
 
-    function bySel(sel){return document.querySelector(sel)}
-    function esc(s){return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+    function esc(s){return (s||'').replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
 
-    function renderLang(lang){
-      const t = I18N[lang]||I18N.en;
-      // static texts
-      document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t[el.getAttribute('data-i18n')] || el.textContent; });
-      bySel('[data-i18n=tagline]').textContent = t.tagline;
+    // Atualiza contagem de players via BattleMetrics
+    async function updatePlayerCounts(){
+      for (const s of SERVERS){
+        try{ const res = await fetch(`https://api.battlemetrics.com/servers/${s.bmId}`); const j = await res.json(); s.players=j.data.attributes.players; s.max=j.data.attributes.maxPlayers; }
+        catch{ s.players=0; s.max=0; }
+      }
+    }
 
-      // rules
-      const rg = bySel('#rulesGrid'); rg.innerHTML = '';
-      t.rules.forEach(r=>{ const d=document.createElement('div'); d.className='card rounded-xl p-4'; d.textContent=r; rg.appendChild(d); });
-
-      // servers
-      const grid = bySel('#serverGrid'); grid.innerHTML='';
-      SERVERS.forEach(s=>{
-        const feats = s.tier==='2x' ? t.feats2x : t.feats10x;
-        const card = document.createElement('div');
-        card.className = 'card rounded-xl p-6';
+    function renderServers(t){
+      const grid = document.querySelector('#serverGrid'); grid.innerHTML='';
+      SERVERS.forEach((s)=>{
+        const card = document.createElement('div'); card.className='card rounded-xl overflow-hidden';
         card.innerHTML = `
-          <h3 class="font-semibold text-lg mb-2">${esc(s.name)}</h3>
-          <p class="text-sm text-zinc-400 mb-2">${esc(s.map)}</p>
-          <ul class="list-disc list-inside text-zinc-300 mb-3 text-sm">${feats.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
-          <div class="mt-2 flex items-start justify-between gap-4 flex-wrap">
-            <div class="flex items-center gap-2">
-              <button class="bg-zinc-800 border border-zinc-700 text-zinc-100 px-3 py-1 rounded-md text-sm hover:bg-zinc-700">${esc(t.copy)} ${esc(s.ip)}</button>
+          <div><img src="${s.banner}" class="w-full h-72 object-cover" alt="banner"/></div>
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-1">${esc(s.name)}</h3>
+            <p class="text-zinc-400 text-sm mb-3">${t.customMap}</p>
+            <div class="w-full bg-zinc-800 h-3 rounded-full overflow-hidden mb-2">
+              <div class="bg-emerald-500 h-full transition-all" style="width:${s.players&&s.max?(s.players/s.max*100):0}%"></div>
             </div>
-            <div class="flex flex-col items-end">
-              <div class="w-24 h-24 rounded-md border border-zinc-800 bg-zinc-900/60 mb-2 overflow-hidden">
-                <img src="${BRAND_LOGO}" alt="logo" class="w-full h-full object-contain"/>
-              </div>
-              <a href="${esc(s.store)}" target="_blank" class="px-3 py-1 rounded-md text-sm font-semibold bg-amber-400 text-black hover:bg-amber-500 text-center">${esc(t.shop)}</a>
+            <p class="text-sm text-zinc-400 mb-3">${s.players||0} / ${s.max||100} players</p>
+            <div class="flex items-center gap-2 mt-1">
+              <button class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-3 py-2 rounded-md" onclick="navigator.clipboard.writeText('client.connect ${s.ip}').then(()=>alert('${t.copyAlert}'))">
+                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 9l4-4 4 4m-4-4v12\"/></svg>
+                ${t.copy}
+              </button>
+              <a href="${s.store}" target="_blank" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-2 rounded-md">
+                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 6h15l-1.5 9h-12z\"/><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/></svg>
+                ${t.shop}
+              </a>
+              <button class="ml-auto inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-md" onclick="openModal('${s.bmId}','${s.banner}','${esc(s.name)}','${s.tier}')">
+                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"8\" x2=\"12.01\" y2=\"8\"/></svg>
+                ${t.info}
+              </button>
             </div>
           </div>`;
-        const btn = card.querySelector('button');
-        btn.addEventListener('click', ()=>{ navigator.clipboard.writeText('connect '+s.ip).then(()=>alert(t.copyAlert)); });
         grid.appendChild(card);
       });
     }
 
-    document.getElementById('lang').addEventListener('change', (e)=>renderLang(e.target.value));
-    renderLang('pt'); // default BR
+    function renderRules(t){
+      const wrap = document.querySelector('#rulesGrid'); wrap.innerHTML='';
+      t.rules.forEach(txt=>{ const d=document.createElement('div'); d.className='card rounded-xl p-5'; d.textContent=txt; wrap.appendChild(d); });
+    }
+
+    function renderLang(lang){
+      const t = I18N[lang]||I18N.pt;
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t[el.getAttribute('data-i18n')] || el.textContent; });
+      document.getElementById('heroText').textContent = t.tagline;
+      renderRules(t); renderServers(t);
+    }
+
+    async function openModal(id,img,name,tier){
+      document.getElementById('modalImg').src = img;
+      document.getElementById('modalTitle').textContent = name;
+      const lang = document.getElementById('lang').value; const t = I18N[lang]||I18N.pt;
+      document.getElementById('modalSub').textContent = (tier==='2x'? (lang==='en'?'2X Servers':lang==='es'?'Servidores 2X':'Servidores 2X') : (lang==='en'?'10X Servers':lang==='es'?'Servidores 10X':'Servidores 10X'));
+      const items = (tier==='2x'? t.feats2x : t.feats10x);
+      document.getElementById('modalList').innerHTML = items.map(li=>`<li>${esc(li)}</li>`).join('');
+      document.getElementById('modalBM').href = `https://www.battlemetrics.com/servers/rust/${id}`;
+      try{ const res = await fetch(`https://api.battlemetrics.com/servers/${id}`); const j = await res.json(); document.getElementById('playerCount').textContent = `${j.data.attributes.players} / ${j.data.attributes.maxPlayers} players online`; }
+      catch{ document.getElementById('playerCount').textContent = ''; }
+      const m = document.getElementById('infoModal'); m.classList.remove('hidden'); m.classList.add('flex');
+    }
+
+    function closeModal(){ const m=document.getElementById('infoModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+
+    document.getElementById('lang').addEventListener('change', async (e)=>{ await updatePlayerCounts(); renderLang(e.target.value); });
+
+    (async ()=>{ await updatePlayerCounts(); renderLang('pt'); })();
   </script>
 </body>
 </html>

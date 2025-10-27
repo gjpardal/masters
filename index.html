@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masters Servers</title>
+  <link rel="icon" href="https://www.dropbox.com/scl/fi/mxuygew1g8z4ftwsrw2x8/LOGO.png?rlkey=8331nybscso6xygymtiktbhwz&raw=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .card{background-color:rgba(24,24,27,.70);border:1px solid rgba(63,63,70,.8);}
+  </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100">
+  <div class="min-h-screen bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1520975949964-ec553f84c2d6?q=80&w=1920&auto=format&fit=crop');">
+    <div class="bg-zinc-950/70 min-h-screen">
+      <!-- HEADER -->
+      <header class="flex items-center justify-between px-6 py-4 border-b border-zinc-800 bg-zinc-950/80 sticky top-0">
+        <div class="flex items-center gap-3">
+          <img src="https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1" class="h-10 w-auto" alt="Masters logo" />
+          <span class="font-semibold text-lg">Masters</span>
+        </div>
+        <nav class="hidden md:flex gap-4 text-sm">
+          <a href="#servers" class="hover:text-emerald-400" data-i18n="navServers">Servers</a>
+          <a href="#rules" class="hover:text-emerald-400" data-i18n="navRules">Rules</a>
+          <a href="#staff" class="hover:text-emerald-400" data-i18n="navStaff">Staff</a>
+          <a href="#discord" class="hover:text-emerald-400" data-i18n="navDiscord">Discord</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <select id="lang" class="rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1 text-sm">
+            <option value="en">English (US)</option>
+            <option value="es">Español</option>
+            <option value="pt" selected>Português (BR)</option>
+          </select>
+          <a href="#discord" class="inline-flex items-center rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold text-black hover:bg-emerald-600">Discord</a>
+        </div>
+      </header>
+
+      <!-- HERO -->
+      <section class="text-center py-16 md:py-20">
+        <img src="https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1" class="mx-auto h-48 md:h-64 mb-6" alt="Masters" />
+        <h1 class="text-5xl font-extrabold mb-4">Masters</h1>
+        <p class="max-w-2xl mx-auto text-zinc-300" data-i18n="tagline">Friendly PVE server with exclusive legendary weapons, epic tools that level up as you use them, and tons of events.</p>
+      </section>
+
+      <!-- SERVERS -->
+      <section id="servers" class="py-16 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 7h16M4 12h16M4 17h16'/></svg> <span data-i18n="serversTitle">Servers</span></h2>
+
+        <div class="grid md:grid-cols-2 gap-6" id="serverGrid">
+          <!-- Cards gerados por JS com i18n -->
+        </div>
+      </section>
+
+      <!-- RULES -->
+      <section id="rules" class="py-16 px-6 max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3'/></svg> <span data-i18n="rulesTitle">General Rules</span></h2>
+        <div class="grid md:grid-cols-2 gap-6" id="rulesGrid"></div>
+      </section>
+
+      <!-- STAFF -->
+      <section id="staff" class="py-16 px-6 text-center">
+        <h2 class="text-3xl font-bold mb-8">Staff</h2>
+        <div class="max-w-md mx-auto bg-zinc-900/70 border border-zinc-800 rounded-xl p-8 shadow-xl">
+          <img src="https://www.dropbox.com/scl/fi/mxuygew1g8z4ftwsrw2x8/LOGO.png?rlkey=8331nybscso6xygymtiktbhwz&raw=1" class="mx-auto mb-6 h-28 w-28 rounded-full border-4 border-emerald-500 shadow-emerald-600/40 shadow-xl" />
+          <h3 class="text-xl font-bold mb-2 text-emerald-400">MestrePardal</h3>
+          <p class="text-zinc-400 text-sm mb-6">Owner / Dev</p>
+          <div class="flex justify-center gap-8 text-sm">
+            <a href="https://steamcommunity.com/profiles/76561199834841239" target="_blank" class="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition">
+              <img src="https://cdn-icons-png.flaticon.com/512/5969/5969282.png" class="h-6 w-6" /> Steam
+            </a>
+            <a href="https://youtube.com/mestrepardal" target="_blank" class="flex items-center gap-2 text-red-500 hover:text-red-400 font-semibold transition">
+              <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="h-6 w-6" /> YouTube
+            </a>
+            <a href="https://twitch.tv/mestre_pardal" target="_blank" class="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-semibold transition">
+              <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" class="h-6 w-6" /> Twitch
+            </a>
+          </div>
+        </div>
+      </section>
+      <section id="discord" class="py-16 px-6 text-center">
+        <h2 class="text-3xl font-bold mb-4">Junte-se à comunidade</h2>
+        <p class="text-zinc-300 mb-6">Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.</p>
+        <a href="https://discord.gg/the-masters" target="_blank" class="bg-emerald-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600">Entrar no Discord</a>
+      </section>
+
+      <footer class="border-t border-zinc-800 py-8 text-center text-zinc-400 text-sm">
+        © 2025 Masters. Not affiliated with Facepunch.
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const BRAND_LOGO = "https://www.dropbox.com/scl/fi/u9i66cy67uatrsi04g65k/logo-menor.png?rlkey=90crte22se3l3i834jc0j2d1s&raw=1";
+
+    const SERVERS = [
+      { name: "BR LATAM - Masters 2X PVE", ip: "177.138.84.236:28015", store: "https://themasters.craftingstore.net/", map: "Procedural | 4k", tier: "2x" },
+      { name: "BR LATAM - Masters 10X PVE", ip: "201.46.47.98:28015",   store: "https://10xmasters.craftingstore.net/", map: "Procedural | 3.5k", tier: "10x" },
+      { name: "EU - Masters 2X PVE",       ip: "185.29.166.231:10001",  store: "https://eumasters.craftingstore.net/",  map: "Procedural | 4k", tier: "2x" },
+      { name: "EU - Masters 10X PVE",      ip: "151.242.106.72:10025",  store: "https://10xmasterseu.craftingstore.net/", map: "Procedural | 3k", tier: "10x" },
+    ];
+
+    const I18N = {
+      en: {
+        navServers:"Servers", navRules:"Rules", navStaff:"Staff", navDiscord:"Discord",
+        tagline:"Friendly PVE server with exclusive legendary weapons, epic tools that level up as you use them, and tons of events.",
+        serversTitle:"Servers", rulesTitle:"General Rules", staffTitle:"Staff",
+        discordTitle:"Join the community", discordText:"Ask questions, read announcements and events, join giveaways, and talk to the staff.", discordBtn:"Join Discord",
+        mapLabel:"Procedural", copy:"Copy connect", shop:"Open store", copyAlert:"Copied! Open Rust and paste in F1.",
+        feats2x:["2X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        feats10x:["10X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        rules:[
+          "Do not abuse bugs. If you find one, tell the admins.",
+          "New players are always welcome.",
+          "Racism or insults = BAN.",
+          "Cheat/Macro = BAN.",
+          "Killing people with bug/crush = BAN.",
+          "Any issue: open a ticket on our Discord.",
+        ],
+      },
+      es: {
+        navServers:"Servidores", navRules:"Reglas", navStaff:"Staff", navDiscord:"Discord",
+        tagline:"Servidor PVE amigable, con armas legendarias exclusivas, herramientas épicas que mejoran con el uso y muchos eventos para divertirse.",
+        serversTitle:"Servidores", rulesTitle:"Reglas Generales", staffTitle:"Staff",
+        discordTitle:"Únete a la comunidad", discordText:"Resuelve dudas, mira anuncios y eventos, participa en sorteos y habla con el staff.", discordBtn:"Entrar al Discord",
+        mapLabel:"Procedural", copy:"Copiar connect", shop:"Abrir tienda", copyAlert:"¡Copiado! Abre Rust y pega en F1.",
+        feats2x:["2X Recursos y farmeo","Herramientas/Plugins aumentan el farmeo","Moneda del juego MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        feats10x:["10X Recursos y farmeo","Herramientas/Plugins aumentan el farmeo","Moneda del juego MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        rules:[
+          "No abuses BUGS. Si encuentras uno, avisa al ADM.",
+          "Nuevos jugadores siempre bienvenidos.",
+          "Racismo u ofensas = BAN.",
+          "Cheat/Macro = BAN.",
+          "Matar con bug/aplastados = BAN.",
+          "Cualquier problema: abre un ticket en Discord.",
+        ],
+      },
+      pt: {
+        navServers:"Servidores", navRules:"Regras", navStaff:"Staff", navDiscord:"Discord",
+        tagline:"Servidor PVE amigável, com várias armas lendárias exclusivas, ferramentas épicas que melhoram conforme o uso e muitos eventos para se divertir.",
+        serversTitle:"Servidores", rulesTitle:"Regras", staffTitle:"Staff",
+        discordTitle:"Junte-se à comunidade", discordText:"Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.", discordBtn:"Entrar no Discord",
+        mapLabel:"Procedural", copy:"Copiar connect", shop:"Abrir loja", copyAlert:"Comando copiado! Abra o Rust e cole no F1.",
+        feats2x:["2X Farms e Recursos","Ferramentas e Plugins Aumentam o Farm","Moeda no Jogo MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        feats10x:["10X Farms e Recursos","Ferramentas e Plugins Aumentam o Farm","Moeda no Jogo MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        rules:[
+          "Não abuse de BUGS. Caso encontre, avise o ADM.",
+          "Novos Players sempre serão Bem-Vindos.",
+          "Racismo ou ofensas = BAN.",
+          "Cheat/Macro = BAN.",
+          "Matar pessoas com bug/esmagadas = BAN.",
+          "Qualquer problema: abra um Ticket no nosso Discord.",
+        ],
+      },
+    };
+
+    function bySel(sel){return document.querySelector(sel)}
+    function esc(s){return s.replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+
+    function renderLang(lang){
+      const t = I18N[lang]||I18N.en;
+      // static texts
+      document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t[el.getAttribute('data-i18n')] || el.textContent; });
+      bySel('[data-i18n=tagline]').textContent = t.tagline;
+
+      // rules
+      const rg = bySel('#rulesGrid'); rg.innerHTML = '';
+      t.rules.forEach(r=>{ const d=document.createElement('div'); d.className='card rounded-xl p-4'; d.textContent=r; rg.appendChild(d); });
+
+      // servers
+      const grid = bySel('#serverGrid'); grid.innerHTML='';
+      SERVERS.forEach(s=>{
+        const feats = s.tier==='2x' ? t.feats2x : t.feats10x;
+        const card = document.createElement('div');
+        card.className = 'card rounded-xl p-6';
+        card.innerHTML = `
+          <h3 class="font-semibold text-lg mb-2">${esc(s.name)}</h3>
+          <p class="text-sm text-zinc-400 mb-2">${esc(s.map)}</p>
+          <ul class="list-disc list-inside text-zinc-300 mb-3 text-sm">${feats.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>
+          <div class="mt-2 flex items-start justify-between gap-4 flex-wrap">
+            <div class="flex items-center gap-2">
+              <button class="bg-zinc-800 border border-zinc-700 text-zinc-100 px-3 py-1 rounded-md text-sm hover:bg-zinc-700">${esc(t.copy)} ${esc(s.ip)}</button>
+            </div>
+            <div class="flex flex-col items-end">
+              <div class="w-24 h-24 rounded-md border border-zinc-800 bg-zinc-900/60 mb-2 overflow-hidden">
+                <img src="${BRAND_LOGO}" alt="logo" class="w-full h-full object-contain"/>
+              </div>
+              <a href="${esc(s.store)}" target="_blank" class="px-3 py-1 rounded-md text-sm font-semibold bg-amber-400 text-black hover:bg-amber-500 text-center">${esc(t.shop)}</a>
+            </div>
+          </div>`;
+        const btn = card.querySelector('button');
+        btn.addEventListener('click', ()=>{ navigator.clipboard.writeText('connect '+s.ip).then(()=>alert(t.copyAlert)); });
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('lang').addEventListener('change', (e)=>renderLang(e.target.value));
+    renderLang('pt'); // default BR
+  </script>
+</body>
+</html>

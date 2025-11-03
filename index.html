@@ -55,7 +55,7 @@
         <div class="grid md:grid-cols-2 gap-6" id="rulesGrid"></div>
       </section>
 
-      <!-- STAFF (mantido) -->
+      <!-- STAFF -->
       <section id="staff" class="py-16 px-6 text-center">
         <h2 class="text-3xl font-bold mb-8">Staff</h2>
         <div class="max-w-md mx-auto bg-zinc-900/70 border border-zinc-800 rounded-xl p-8 shadow-xl">
@@ -70,7 +70,7 @@
         </div>
       </section>
 
-      <!-- DISCORD (mantido) -->
+      <!-- DISCORD -->
       <section id="discord" class="py-16 px-6 text-center">
         <h2 class="text-3xl font-bold mb-4">Junte-se à comunidade</h2>
         <p class="text-zinc-300 mb-6">Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.</p>
@@ -86,7 +86,8 @@
     <div class="absolute inset-0 backdrop" onclick="closeModal()"></div>
     <div class="relative bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl w-[min(95vw,860px)]">
       <button class="absolute top-3 right-3 bg-zinc-800/70 hover:bg-zinc-700 rounded-md px-3 py-1 text-sm" onclick="closeModal()">✕</button>
-      <img id="modalImg" src="" class="w-full h-72 object-cover rounded-t-xl" alt="banner" />
+      <!-- imagem do modal também sem corte -->
+      <img id="modalImg" src="" class="w-full" style="aspect-ratio:1280/600; object-fit:contain;" alt="banner" />
       <div class="p-5">
         <div class="flex items-center justify-between mb-2">
           <h3 id="modalTitle" class="text-2xl font-bold"></h3>
@@ -119,8 +120,8 @@
         tagline:"Friendly PVE servers with legendary weapons, epic tools that level up as you use them, smart economy and 24/7 dynamic events.",
         serversTitle:"Servers", rulesTitle:"General Rules",
         copy:"Copy connect", shop:"SHOP", copyAlert:"Copied! Open Rust and paste in F1.", info:"INFO", customMap:"Custom Map",
-        feats2x:["2X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
-        feats10x:["10X Farming & resources","Tools/Plugins increase farming","In‑game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        feats2x:["2X Farming & resources","Tools/Plugins increase farming","In-game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
+        feats10x:["10X Farming & resources","Tools/Plugins increase farming","In-game currency MP$","/mymini, /clans, /nv, /tpa, /shop, /kits, /buyraid"],
         rules:[
           "Do not abuse bugs — report them to admins.",
           "Be kind to new players.",
@@ -166,11 +167,18 @@
 
     function esc(s){return (s||'').replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
 
-    // Atualiza contagem de players via BattleMetrics
+    // Atualiza contagem de players e nome real via BattleMetrics
     async function updatePlayerCounts(){
       for (const s of SERVERS){
-        try{ const res = await fetch(`https://api.battlemetrics.com/servers/${s.bmId}`); const j = await res.json(); s.players=j.data.attributes.players; s.max=j.data.attributes.maxPlayers; }
-        catch{ s.players=0; s.max=0; }
+        try{
+          const res = await fetch(`https://api.battlemetrics.com/servers/${s.bmId}`);
+          const j = await res.json();
+          s.players  = j.data.attributes.players;
+          s.max      = j.data.attributes.maxPlayers;
+          s.realname = j.data.attributes.name; // <- nome oficial BattleMetrics
+        }catch{
+          s.players=0; s.max=0;
+        }
       }
     }
 
@@ -179,9 +187,12 @@
       SERVERS.forEach((s)=>{
         const card = document.createElement('div'); card.className='card rounded-xl overflow-hidden';
         card.innerHTML = `
-          <div><img src="${s.banner}" class="w-full h-72 object-cover" alt="banner"/></div>
+          <div>
+            <!-- imagem no formato 1280x600 sem corte -->
+            <img src="${s.banner}" class="w-full" style="aspect-ratio:1280/600; object-fit:contain;" alt="banner"/>
+          </div>
           <div class="p-5">
-            <h3 class="text-xl font-bold mb-1">${esc(s.name)}</h3>
+            <h3 class="text-xl font-bold mb-1">${esc(s.realname || s.name)}</h3>
             <p class="text-zinc-400 text-sm mb-3">${t.customMap}</p>
             <div class="w-full bg-zinc-800 h-3 rounded-full overflow-hidden mb-2">
               <div class="bg-emerald-500 h-full transition-all" style="width:${s.players&&s.max?(s.players/s.max*100):0}%"></div>
@@ -196,7 +207,7 @@
                 <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M6 6h15l-1.5 9h-12z\"/><circle cx=\"9\" cy=\"20\" r=\"1\"/><circle cx=\"18\" cy=\"20\" r=\"1\"/></svg>
                 ${t.shop}
               </a>
-              <button class="ml-auto inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-md" onclick="openModal('${s.bmId}','${s.banner}','${esc(s.name)}','${s.tier}')">
+              <button class="ml-auto inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-md" onclick="openModal('${s.bmId}','${s.banner}','${esc(s.realname || s.name)}','${s.tier}')">
                 <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"12\"/><line x1=\"12\" y1=\"8\" x2=\"12.01\" y2=\"8\"/></svg>
                 ${t.info}
               </button>
@@ -220,7 +231,11 @@
 
     async function openModal(id,img,name,tier){
       document.getElementById('modalImg').src = img;
-      document.getElementById('modalTitle').textContent = name;
+
+      // usa sempre o nome mais atualizado do array
+      const found = SERVERS.find(s=>s.bmId===id);
+      document.getElementById('modalTitle').textContent = (found && (found.realname||found.name)) || name;
+
       const lang = document.getElementById('lang').value; const t = I18N[lang]||I18N.pt;
       document.getElementById('modalSub').textContent = (tier==='2x'? (lang==='en'?'2X Servers':lang==='es'?'Servidores 2X':'Servidores 2X') : (lang==='en'?'10X Servers':lang==='es'?'Servidores 10X':'Servidores 10X'));
       const items = (tier==='2x'? t.feats2x : t.feats10x);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,9 +28,9 @@
         </nav>
         <div class="flex items-center gap-2">
           <select id="lang" class="rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1 text-sm">
-            <option value="en">English (US)</option>
+            <option value="en" selected>English (US)</option>
             <option value="es">Español</option>
-            <option value="pt" selected>Português (BR)</option>
+            <option value="pt">Português (BR)</option>
           </select>
           <a href="#discord" class="inline-flex items-center rounded-md bg-emerald-500 px-3 py-1.5 text-sm font-semibold text-black hover:bg-emerald-600">Discord</a>
         </div>
@@ -40,6 +40,8 @@
       <section class="text-center py-16 md:py-20">
         <img src="https://i.ibb.co/qMM5FSY1/Cabe-a.png" class="mx-auto h-56 md:h-72 mb-5" alt="Masters" />
         <p id="heroText" class="max-w-3xl mx-auto text-base md:text-lg text-white leading-relaxed px-4"></p>
+        <p id="shopNotice" class="mt-6 text-center font-semibold text-zinc-100"></p>
+<div id="shopButtons" class="mt-2 flex flex-wrap gap-3 justify-center"></div>
       </section>
 
       <!-- SERVERS -->
@@ -217,6 +219,28 @@
       });
     }
 
+    
+    function renderShops(t){
+      const wrap = document.getElementById('shopButtons');
+      if (!wrap) return;
+      wrap.innerHTML = '';
+      // Create one clear button per server/store
+      SERVERS.forEach((s)=>{
+        const a = document.createElement('a');
+        a.href = s.store;
+        a.target = '_blank';
+        a.className = 'inline-flex items-center gap-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2';
+        // Label: "<Server name> — SHOP"
+        a.textContent = (s.name + ' — ' + (t.shop || 'SHOP'));
+        wrap.appendChild(a);
+      });
+      // Helper text line
+      const hint = document.createElement('p');
+      hint.className = 'w-full text-center text-sm text-zinc-300 mt-2';
+      hint.textContent = (t.shopHint || 'Choose the right store for your region and server tier.');
+      wrap.appendChild(hint);
+    }
+
     function renderRules(t){
       const wrap = document.querySelector('#rulesGrid'); wrap.innerHTML='';
       t.rules.forEach(txt=>{ const d=document.createElement('div'); d.className='card rounded-xl p-5'; d.textContent=txt; wrap.appendChild(d); });
@@ -226,7 +250,7 @@
       const t = I18N[lang]||I18N.pt;
       document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t[el.getAttribute('data-i18n')] || el.textContent; });
       document.getElementById('heroText').textContent = t.tagline;
-      renderRules(t); renderServers(t);
+      renderShops(t); renderRules(t); renderServers(t);
     }
 
     async function openModal(id,img,name,tier){
@@ -250,7 +274,7 @@
 
     document.getElementById('lang').addEventListener('change', async (e)=>{ await updatePlayerCounts(); renderLang(e.target.value); });
 
-    (async ()=>{ await updatePlayerCounts(); renderLang('pt'); })();
+    (async ()=>{ await updatePlayerCounts(); renderLang('en'); })();
   </script>
 </body>
 </html>

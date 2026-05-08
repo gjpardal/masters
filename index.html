@@ -1,336 +1,1072 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Masters Servers</title>
+  <meta name="description" content="The Masters Rust PvE Servers - BR, LATAM e EU." />
+  <meta name="theme-color" content="#09090b" />
+  <title>The Masters Servers | Rust PvE</title>
   <link rel="icon" href="https://i.ibb.co/PsnxFTWW/LOGO.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .card{background-color:rgba(24,24,27,.70);border:1px solid rgba(63,63,70,.8);} 
-    .backdrop{background:rgba(0,0,0,.65)}
-    .soft-shadow{box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    :root {
+      color-scheme: dark;
+      --panel: rgba(18, 18, 20, .84);
+      --panel-strong: rgba(10, 10, 12, .92);
+      --line: rgba(255, 255, 255, .12);
+      --line-strong: rgba(255, 255, 255, .2);
+      --green: #34d399;
+      --green-strong: #10b981;
+      --blue: #38bdf8;
+      --blue-strong: #2563eb;
+      --amber: #fbbf24;
+      --rust: #f97316;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #070707;
+      color: #f4f4f5;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .hero-bg {
+      min-height: 100vh;
+      background-image:
+        linear-gradient(180deg, rgba(7, 7, 7, .76) 0%, rgba(7, 7, 7, .92) 64%, #070707 100%),
+        linear-gradient(90deg, rgba(7, 7, 7, .72), rgba(7, 7, 7, .22)),
+        url("https://images.unsplash.com/photo-1520975949964-ec553f84c2d6?q=80&w=1920&auto=format&fit=crop");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .nav-shell {
+      background: rgba(9, 9, 11, .78);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-link {
+      color: #d4d4d8;
+      font-size: .9rem;
+      font-weight: 700;
+      transition: color .18s ease;
+    }
+
+    .nav-link:hover { color: #fff; }
+
+    .glass-panel,
+    .server-card,
+    .shop-card,
+    .rule-item,
+    .staff-card,
+    .modal-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .36);
+      backdrop-filter: blur(16px);
+    }
+
+    .server-card,
+    .shop-card,
+    .rule-item {
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .server-card:hover,
+    .shop-card:hover,
+    .rule-item:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      background: rgba(24, 24, 27, .9);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      min-height: 42px;
+      border-radius: 8px;
+      padding: .7rem 1rem;
+      font-size: .9rem;
+      font-weight: 800;
+      line-height: 1.1;
+      transition: transform .16s ease, filter .16s ease, background .16s ease, border-color .16s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green), var(--green-strong));
+      color: #03140d;
+    }
+
+    .btn-store {
+      background: linear-gradient(135deg, var(--blue), var(--blue-strong));
+      color: #fff;
+    }
+
+    .btn-muted {
+      background: rgba(39, 39, 42, .88);
+      border: 1px solid rgba(255, 255, 255, .1);
+      color: #f4f4f5;
+    }
+
+    .btn-muted:hover {
+      background: rgba(63, 63, 70, .9);
+      border-color: rgba(255, 255, 255, .18);
+    }
+
+    .btn-discord {
+      background: #5865f2;
+      color: #fff;
+      box-shadow: 0 14px 34px rgba(88, 101, 242, .28);
+    }
+
+    .btn-discord:hover {
+      background: #6772f4;
+      filter: saturate(1.08);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      border: 1px solid rgba(52, 211, 153, .34);
+      border-radius: 999px;
+      background: rgba(5, 150, 105, .14);
+      color: #bbf7d0;
+      padding: .42rem .75rem;
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    .trust-item {
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(9, 9, 11, .58);
+      padding: .85rem;
+    }
+
+    .trust-item strong {
+      display: block;
+      color: #fff;
+      font-size: .92rem;
+      line-height: 1.1;
+    }
+
+    .trust-item span {
+      display: block;
+      margin-top: .25rem;
+      color: #a1a1aa;
+      font-size: .78rem;
+      line-height: 1.35;
+    }
+
+    .server-media {
+      position: relative;
+      overflow: hidden;
+      background: #09090b;
+    }
+
+    .server-media img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1280 / 600;
+      object-fit: cover;
+    }
+
+    .server-media::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, .08), rgba(0, 0, 0, .64));
+      pointer-events: none;
+    }
+
+    .chip,
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .38rem;
+      border-radius: 999px;
+      padding: .32rem .58rem;
+      font-size: .72rem;
+      font-weight: 900;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .chip {
+      border: 1px solid rgba(255, 255, 255, .15);
+      background: rgba(9, 9, 11, .7);
+      color: #f4f4f5;
+    }
+
+    .status-online {
+      border: 1px solid rgba(52, 211, 153, .42);
+      background: rgba(6, 95, 70, .48);
+      color: #bbf7d0;
+    }
+
+    .status-offline {
+      border: 1px solid rgba(248, 113, 113, .36);
+      background: rgba(127, 29, 29, .42);
+      color: #fecaca;
+    }
+
+    .status-sync {
+      border: 1px solid rgba(251, 191, 36, .36);
+      background: rgba(120, 53, 15, .42);
+      color: #fde68a;
+    }
+
+    .bar-track {
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(63, 63, 70, .72);
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--amber), var(--rust));
+      transition: width .45s ease;
+    }
+
+    .feature-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .38rem;
+      border-radius: 999px;
+      background: rgba(39, 39, 42, .72);
+      border: 1px solid rgba(255, 255, 255, .09);
+      color: #d4d4d8;
+      padding: .45rem .62rem;
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .info-box {
+      border: 1px solid rgba(255, 255, 255, .09);
+      border-radius: 8px;
+      background: rgba(9, 9, 11, .45);
+      padding: .72rem;
+      min-width: 0;
+    }
+
+    .info-box span {
+      display: block;
+      color: #a1a1aa;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .info-box strong {
+      display: block;
+      margin-top: .25rem;
+      color: #fff;
+      font-size: .9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .rule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: .85rem;
+      padding: 1rem;
+      color: #e4e4e7;
+      font-weight: 650;
+    }
+
+    .rule-number {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, .15);
+      color: #86efac;
+      font-size: .78rem;
+      font-weight: 900;
+    }
+
+    .modal-backdrop {
+      background: rgba(0, 0, 0, .74);
+      backdrop-filter: blur(10px);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 70;
+      transform: translateX(-50%) translateY(18px);
+      opacity: 0;
+      pointer-events: none;
+      border: 1px solid rgba(52, 211, 153, .34);
+      border-radius: 8px;
+      background: rgba(9, 9, 11, .94);
+      color: #dcfce7;
+      padding: .85rem 1rem;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, .42);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg { background-attachment: scroll; }
+      .btn {
+        width: 100%;
+        white-space: normal;
+      }
+    }
   </style>
 </head>
-<body class="bg-zinc-950 text-zinc-100">
-  <!-- HERO -->
-  <div class="min-h-screen bg-cover bg-center" style="background-image:url('https://images.unsplash.com/photo-1520975949964-ec553f84c2d6?q=80&w=1920&auto=format&fit=crop');">
-    <div class="bg-zinc-950/70 min-h-screen">
-      <header class="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <img src="https://i.ibb.co/PsnxFTWW/LOGO.png" alt="logo" class="w-10 h-10 rounded-lg" />
-          <div>
-            <h1 class="text-2xl font-extrabold tracking-tight">The Masters</h1>
-            <p class="text-sm text-zinc-400">Rust PvE Servers • BR / EU</p>
+<body>
+  <div class="hero-bg">
+    <header class="nav-shell sticky top-0 z-40">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
+        <a href="#" class="flex min-w-0 items-center gap-3" aria-label="The Masters">
+          <img src="https://i.ibb.co/PsnxFTWW/LOGO.png" alt="The Masters logo" class="h-11 w-11 rounded-md border border-white/10 object-cover" />
+          <div class="min-w-0">
+            <p class="truncate text-lg font-black leading-tight text-white">The Masters</p>
+            <p class="truncate text-xs font-bold text-zinc-400">Rust PvE Servers - BR / EU</p>
           </div>
+        </a>
+
+        <div class="hidden items-center gap-6 lg:flex">
+          <a href="#servers" class="nav-link" data-i18n="navServers">Servidores</a>
+          <a href="#shops" class="nav-link" data-i18n="navStores">Lojas</a>
+          <a href="#rules" class="nav-link" data-i18n="navRules">Regras</a>
+          <a href="#staff" class="nav-link" data-i18n="navStaff">Staff</a>
         </div>
-        <div class="flex items-center gap-3">
-          <select id="lang" class="bg-zinc-900 border border-zinc-700 rounded-md px-3 py-2 text-sm">
+
+        <div class="flex shrink-0 items-center gap-2">
+          <label for="lang" class="sr-only">Idioma</label>
+          <select id="lang" class="h-[42px] rounded-lg border border-white/10 bg-zinc-950/80 px-3 text-sm font-bold text-zinc-100 outline-none transition hover:border-white/20 focus:border-emerald-400">
+            <option value="pt" selected>Português</option>
             <option value="en">English</option>
-            <option value="pt">Português</option>
             <option value="es">Español</option>
           </select>
+          <a href="https://discord.gg/the-masters" target="_blank" rel="noopener noreferrer" class="btn btn-discord" aria-label="Discord">
+            <span aria-hidden="true">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8l-.24.49a18.2 18.2 0 0 1 4.42 2.14 14.7 14.7 0 0 0-5.33-1.55 15.9 15.9 0 0 0-4.42 0 14.7 14.7 0 0 0-5.33 1.55 18.2 18.2 0 0 1 4.42-2.14l-.24-.49A19.8 19.8 0 0 0 3.68 4.37C.54 9.05-.31 13.61.12 18.1a20 20 0 0 0 6.08 3.1l.75-1.24a13 13 0 0 1-1.18-.56c.1-.07.2-.15.29-.23a14.2 14.2 0 0 0 11.88 0l.29.23c-.38.2-.77.39-1.18.56l.75 1.24a20 20 0 0 0 6.08-3.1c.5-5.2-.86-9.72-3.56-13.73ZM8.03 15.35c-1.17 0-2.12-1.08-2.12-2.41 0-1.34.93-2.42 2.12-2.42 1.18 0 2.14 1.09 2.12 2.42 0 1.33-.94 2.41-2.12 2.41Zm7.94 0c-1.17 0-2.12-1.08-2.12-2.41 0-1.34.94-2.42 2.12-2.42 1.19 0 2.14 1.09 2.12 2.42 0 1.33-.93 2.41-2.12 2.41Z"/></svg>
+            </span>
+            <span class="hidden sm:inline" data-i18n="navDiscord">Discord</span>
+          </a>
         </div>
-      </header>
+      </nav>
+    </header>
 
-      <section class="max-w-6xl mx-auto px-4 pb-6">
-        <div class="text-center my-6">
-          <p id="heroText" class="text-lg text-zinc-300">Play fair. Build big. Have fun.</p>
-        </div>
+    <main>
+      <section class="mx-auto grid max-w-7xl gap-8 px-4 pb-10 pt-10 lg:grid-cols-[1.06fr_.94fr] lg:items-center lg:pb-14 lg:pt-16">
+        <div>
+          <span class="eyebrow">
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            <span data-i18n="heroBadge">PvE BR / LATAM / EU</span>
+          </span>
+          <h1 class="mt-5 max-w-3xl text-5xl font-black leading-[.95] text-white md:text-7xl">The Masters</h1>
+          <p id="heroText" class="mt-5 max-w-2xl text-lg font-medium leading-8 text-zinc-200 md:text-xl">Jogue limpo. Construa gigante. Divirta-se.</p>
 
-        <!-- SHOP HINT -->
-        <div class="max-w-3xl mx-auto mb-4">
-          <div class="rounded-md border border-yellow-400/60 bg-yellow-500/10 text-yellow-200 px-4 py-3 text-sm text-center">
-            <span data-i18n="shopWarn">Make sure you’re entering the correct store for your server.</span>
+          <div class="mt-7 grid gap-3 sm:grid-cols-3">
+            <div class="trust-item">
+              <strong data-i18n="trustOneTitle">PvE organizado</strong>
+              <span data-i18n="trustOneText">Regras claras e foco em diversão.</span>
+            </div>
+            <div class="trust-item">
+              <strong data-i18n="trustTwoTitle">Staff ativa</strong>
+              <span data-i18n="trustTwoText">Suporte e avisos pela comunidade.</span>
+            </div>
+            <div class="trust-item">
+              <strong data-i18n="trustThreeTitle">Lojas oficiais</strong>
+              <span data-i18n="trustThreeText">Cada região com sua loja certa.</span>
+            </div>
+          </div>
+
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a href="#servers" class="btn btn-primary">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17V7l8-4 8 4v10l-8 4-8-4Z"/><path d="m4 7 8 4 8-4"/><path d="M12 11v10"/></svg>
+              <span data-i18n="seeServers">Ver servidores</span>
+            </a>
+            <a href="#shops" class="btn btn-muted">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+              <span data-i18n="officialStores">Lojas oficiais</span>
+            </a>
           </div>
         </div>
 
-        <!-- SHOPS -->
-        <div id="shopButtons" class="max-w-4xl mx-auto flex flex-wrap justify-center gap-2 mb-10"></div>
-
-        <!-- SERVERS GRID -->
-        <div class="max-w-6xl mx-auto">
-          <h2 class="text-xl font-semibold mb-3" data-i18n="serversTitle">Servers</h2>
-          <div id="serverGrid" class="grid gap-4 md:grid-cols-2"></div>
-        </div>
-
-      <!-- RULES -->
-      <section id="rules" class="py-16 px-6 max-w-6xl mx-auto">
-        <h2 class="text-3xl font-bold mb-8 flex items-center gap-2"><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-emerald-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3'/></svg> <span data-i18n="rulesTitle">Regras</span></h2>
-        <div class="grid md:grid-cols-2 gap-6" id="rulesGrid"></div>
+        <aside class="glass-panel p-4 md:p-5" aria-labelledby="liveTitle">
+          <div class="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h2 id="liveTitle" class="text-xl font-black text-white" data-i18n="liveTitle">Servidores ao vivo</h2>
+              <p class="mt-1 text-sm font-medium text-zinc-400" data-i18n="liveText">Status público via BattleMetrics.</p>
+            </div>
+            <span class="chip">
+              <svg class="h-3.5 w-3.5 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+              Live
+            </span>
+          </div>
+          <div id="heroServerList" class="space-y-3"></div>
+        </aside>
       </section>
 
-      <!-- STAFF -->
-      <section id="staff" class="py-16 px-6 text-center">
-        <h2 class="text-3xl font-bold mb-8">Staff</h2>
-        <div class="max-w-md mx-auto bg-zinc-900/70 border border-zinc-800 rounded-xl p-8 shadow-xl">
-          <img src="https://i.ibb.co/PsnxFTWW/LOGO.png" class="mx-auto mb-6 h-28 w-28 rounded-full border-4 border-emerald-500 shadow-emerald-600/40 shadow-xl" />
-          <h3 class="text-xl font-bold mb-2 text-emerald-400">MestrePardal</h3>
-          <p class="text-zinc-400 text-sm mb-6">Owner / Dev</p>
-          <div class="flex justify-center gap-8 text-sm">
-            <a href="https://steamcommunity.com/profiles/76561199834841239" target="_blank" class="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/5969/5969282.png" class="h-6 w-6" /> Steam</a>
-            <a href="https://youtube.com/mestrepardal" target="_blank" class="flex items-center gap-2 text-red-500 hover:text-red-400 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" class="h-6 w-6" /> YouTube</a>
-            <a href="https://twitch.tv/mestre_pardal" target="_blank" class="flex items-center gap-2 text-purple-400 hover:text-purple-300 font-semibold transition"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" class="h-6 w-6" /> Twitch</a>
+      <section id="shops" class="mx-auto max-w-7xl px-4 py-12">
+        <div class="mb-5 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p class="text-sm font-black uppercase text-sky-300" data-i18n="storesKicker">Lojas oficiais</p>
+            <h2 class="mt-2 text-3xl font-black text-white md:text-4xl" data-i18n="shopTitle">Escolha a loja do seu servidor</h2>
+          </div>
+          <p class="max-w-xl text-sm font-medium leading-6 text-zinc-300" data-i18n="shopWarn">Certifique-se de entrar na loja correta do seu servidor.</p>
+        </div>
+        <div id="shopButtons" class="grid gap-4 md:grid-cols-2"></div>
+        <p class="mt-4 text-center text-sm font-medium text-zinc-400" data-i18n="shopHint">Escolha a loja correta da sua região e tier do servidor.</p>
+      </section>
+
+      <section id="servers" class="mx-auto max-w-7xl px-4 py-12">
+        <div class="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p class="text-sm font-black uppercase text-emerald-300" data-i18n="serversKicker">Rust PvE</p>
+            <h2 class="mt-2 text-3xl font-black text-white md:text-4xl" data-i18n="serversTitle">Servidores</h2>
+          </div>
+          <p class="max-w-2xl text-sm font-medium leading-6 text-zinc-300" data-i18n="serversIntro">Entre no servidor certo, copie a conexão e acompanhe os players em tempo real.</p>
+        </div>
+        <div id="serverGrid" class="grid gap-5 lg:grid-cols-2"></div>
+      </section>
+
+      <section id="rules" class="mx-auto max-w-7xl px-4 py-12">
+        <div class="mb-6">
+          <p class="text-sm font-black uppercase text-amber-300" data-i18n="rulesKicker">Comunidade</p>
+          <h2 class="mt-2 text-3xl font-black text-white md:text-4xl" data-i18n="rulesTitle">Regras</h2>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2" id="rulesGrid"></div>
+      </section>
+
+      <section id="staff" class="mx-auto max-w-7xl px-4 py-12">
+        <div class="grid gap-6 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
+          <div>
+            <p class="text-sm font-black uppercase text-emerald-300" data-i18n="staffKicker">Administração</p>
+            <h2 class="mt-2 text-3xl font-black text-white md:text-4xl" data-i18n="staffTitle">Staff</h2>
+            <p class="mt-4 max-w-xl text-sm font-medium leading-7 text-zinc-300" data-i18n="staffText">Servidor com presença de staff, canais de suporte e comunicação direta com a comunidade.</p>
+          </div>
+
+          <div class="staff-card p-6">
+            <div class="flex flex-col gap-5 sm:flex-row sm:items-center">
+              <img src="https://i.ibb.co/PsnxFTWW/LOGO.png" alt="MestrePardal" class="h-28 w-28 rounded-full border-4 border-emerald-500/70 object-cover shadow-xl shadow-emerald-900/30" />
+              <div class="min-w-0 flex-1">
+                <h3 class="text-2xl font-black text-emerald-300">MestrePardal</h3>
+                <p class="mt-1 text-sm font-bold text-zinc-400">Owner / Dev</p>
+                <div class="mt-5 flex flex-wrap gap-3">
+                  <a href="https://steamcommunity.com/profiles/76561199834841239" target="_blank" rel="noopener noreferrer" class="btn btn-muted">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5969/5969282.png" alt="" class="h-5 w-5" />
+                    Steam
+                  </a>
+                  <a href="https://youtube.com/mestrepardal" target="_blank" rel="noopener noreferrer" class="btn btn-muted">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" alt="" class="h-5 w-5" />
+                    YouTube
+                  </a>
+                  <a href="https://twitch.tv/mestre_pardal" target="_blank" rel="noopener noreferrer" class="btn btn-muted">
+                    <img src="https://cdn-icons-png.flaticon.com/512/5968/5968819.png" alt="" class="h-5 w-5" />
+                    Twitch
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- DISCORD -->
-      <section id="discord" class="py-16 px-6 text-center">
-        <h2 class="text-3xl font-bold mb-4">Junte-se à comunidade</h2>
-        <p class="text-zinc-300 mb-6">Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.</p>
-        <a href="https://discord.gg/the-masters" target="_blank" class="bg-emerald-500 text-black px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600">Entrar no Discord</a>
+      <section id="discord" class="mx-auto max-w-7xl px-4 py-14">
+        <div class="glass-panel grid gap-5 p-6 md:grid-cols-[1fr_auto] md:items-center md:p-8">
+          <div>
+            <p class="text-sm font-black uppercase text-sky-300">Discord</p>
+            <h2 class="mt-2 text-3xl font-black text-white" data-i18n="discordTitle">Junte-se à comunidade</h2>
+            <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-zinc-300" data-i18n="discordText">Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.</p>
+          </div>
+          <a href="https://discord.gg/the-masters" target="_blank" rel="noopener noreferrer" class="btn btn-discord">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20.32 4.37A19.8 19.8 0 0 0 15.36 2.8l-.24.49a18.2 18.2 0 0 1 4.42 2.14 14.7 14.7 0 0 0-5.33-1.55 15.9 15.9 0 0 0-4.42 0 14.7 14.7 0 0 0-5.33 1.55 18.2 18.2 0 0 1 4.42-2.14l-.24-.49A19.8 19.8 0 0 0 3.68 4.37C.54 9.05-.31 13.61.12 18.1a20 20 0 0 0 6.08 3.1l.75-1.24a13 13 0 0 1-1.18-.56c.1-.07.2-.15.29-.23a14.2 14.2 0 0 0 11.88 0l.29.23c-.38.2-.77.39-1.18.56l.75 1.24a20 20 0 0 0 6.08-3.1c.5-5.2-.86-9.72-3.56-13.73ZM8.03 15.35c-1.17 0-2.12-1.08-2.12-2.41 0-1.34.93-2.42 2.12-2.42 1.18 0 2.14 1.09 2.12 2.42 0 1.33-.94 2.41-2.12 2.41Zm7.94 0c-1.17 0-2.12-1.08-2.12-2.41 0-1.34.94-2.42 2.12-2.42 1.19 0 2.14 1.09 2.12 2.42 0 1.33-.93 2.41-2.12 2.41Z"/></svg>
+            <span data-i18n="discordCta">Entrar no Discord</span>
+          </a>
+        </div>
       </section>
+    </main>
 
-      <footer class="border-t border-zinc-800 py-8 text-center text-zinc-400 text-sm">© 2025 Masters. Not affiliated with Facepunch.</footer>
-    </div>
+    <footer class="border-t border-white/10 px-4 py-8 text-center text-sm font-medium text-zinc-500">
+      <span data-i18n="footerText">© 2026 Masters. Não afiliado à Facepunch.</span>
+    </footer>
   </div>
 
-  <!-- MODAL -->
-  <div id="infoModal" class="fixed inset-0 hidden items-center justify-center backdrop z-50">
-    <div class="bg-zinc-900 border border-zinc-700 rounded-2xl max-w-2xl w-[92%] soft-shadow">
-      <div class="flex gap-5 p-5">
-        <img id="modalImg" src="" class="w-36 h-24 object-contain rounded-md border border-zinc-700" alt="banner">
-        <div class="flex-1">
-          <h3 id="modalTitle" class="text-xl font-bold"></h3>
-          <p id="modalSub" class="text-zinc-400 text-sm mt-1"></p>
-          <p id="playerCount" class="text-sm mt-2"></p>
-          <div class="mt-4 flex items-center gap-3">
-            <a id="modalBM" href="#" target="_blank" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-3 py-2 rounded-md">
+  <div id="infoModal" class="modal-backdrop fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-panel w-full max-w-2xl overflow-hidden">
+      <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <h3 id="modalTitle" class="text-xl font-black text-white"></h3>
+        <button type="button" data-close-modal class="btn btn-muted min-h-0 px-3 py-2" aria-label="Fechar">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+      <div class="grid gap-5 p-5 md:grid-cols-[180px_1fr]">
+        <img id="modalImg" src="" class="w-full rounded-lg border border-white/10 bg-zinc-950 object-cover" style="aspect-ratio: 1280 / 600;" alt="Banner do servidor" />
+        <div>
+          <p id="modalSub" class="text-sm font-bold text-zinc-400"></p>
+          <p id="playerCount" class="mt-3 text-lg font-black text-emerald-300"></p>
+          <p id="modalIp" class="mt-1 text-sm font-medium text-zinc-400"></p>
+          <div class="mt-5 flex flex-wrap gap-3">
+            <a id="modalBM" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-muted">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-5 5"/></svg>
               BattleMetrics
             </a>
-            <button onclick="closeModal()" class="ml-auto inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-md">Close</button>
+            <a id="modalStore" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-store">
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+              <span data-i18n="openStore">Abrir loja</span>
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
   <script>
-    // ---------------- DATA ----------------
+    const DISCORD_URL = "https://discord.gg/the-masters";
+
     const SERVERS = [
-      { name: "BR LATAM - Masters 10X PVE", ip: "177.138.84.236:28015", bmId:"33357999", store: "https://themasters.craftingstore.net/", tier: "10x", banner:"https://i.ibb.co/67075jQz/CAPA-BR.png" },
-      { name: "EU - Masters 10X PVE",      ip: "31.56.81.22:28015",  bmId:"36854318", store: "https://10xmasterseu.craftingstore.net/", tier: "10x", banner:"https://i.ibb.co/zVDKdv3h/CAPA-EU.png" },
+      {
+        name: "BR LATAM - Masters 10X PVE",
+        region: "BR LATAM",
+        ip: "177.138.84.236:28015",
+        bmId: "33357999",
+        store: "https://themasters.craftingstore.net/",
+        tier: "10X",
+        banner: "https://i.ibb.co/67075jQz/CAPA-BR.png"
+      },
+      {
+        name: "EU - Masters 10X PVE",
+        region: "EU",
+        ip: "31.56.81.22:28015",
+        bmId: "36854318",
+        store: "https://10xmasterseu.craftingstore.net/",
+        tier: "10X",
+        banner: "https://i.ibb.co/zVDKdv3h/CAPA-EU.png"
+      }
     ];
 
     const I18N = {
-      en: {
-        tagline: "Play fair. Build big. Have fun.",
-        serversTitle: "Servers",
-        rulesTitle: "Rules",
-        shop: "Open Store",
-        shopHint: "Choose the right store for your region and server tier.",
-        shopWarn: "Make sure you’re entering the correct store for your server.",
-        customMap: "Custom PvE experience, balanced economy, active staff.",
-        info: "Info",
-        copy: "Copy Connect",
-        copyAlert: "Connect command copied! Paste in Rust console (F1).",
-        navDiscord: "Discord",
-        feats2x: ["PvE balance", "Economy MP$", "Events & Raidable Bases", "Active Staff"],
-        feats10x:["Fast progression", "Economy MP$", "Events & Raidable Bases", "Active Staff"],
-      },
       pt: {
-        tagline: "Jogue limpo. Construa gigante. Divirta-se.",
-        serversTitle: "Servidores",
-        rulesTitle: "Regras",
-        shop: "Abrir Loja",
-        shopHint: "Escolha a loja correta da sua região e tier do servidor.",
-        shopWarn: "Certifique-se de entrar na loja correta do seu servidor.",
-        customMap: "Experiência PvE customizada, economia balanceada, staff ativa.",
-        info: "Info",
-        copy: "Copiar Conexão",
-        copyAlert: "Comando de conexão copiado! Cole no console do Rust (F1).",
+        pageTitle: "The Masters Servers | Rust PvE",
+        navServers: "Servidores",
+        navStores: "Lojas",
+        navRules: "Regras",
+        navStaff: "Staff",
         navDiscord: "Discord",
-        feats2x: ["Balanço PvE", "Economia MP$", "Eventos & Bases Raidáveis", "Staff ativa"],
-        feats10x:["Progressão rápida", "Economia MP$", "Eventos & Bases Raidáveis", "Staff ativa"],
+        heroBadge: "PvE BR / LATAM / EU",
+        tagline: "Jogue limpo. Construa gigante. Divirta-se.",
+        trustOneTitle: "PvE organizado",
+        trustOneText: "Regras claras e foco em diversão.",
+        trustTwoTitle: "Staff ativa",
+        trustTwoText: "Suporte e avisos pela comunidade.",
+        trustThreeTitle: "Lojas oficiais",
+        trustThreeText: "Cada região com sua loja certa.",
+        seeServers: "Ver servidores",
+        officialStores: "Lojas oficiais",
+        liveTitle: "Servidores ao vivo",
+        liveText: "Status público via BattleMetrics.",
+        storesKicker: "Lojas oficiais",
+        shopTitle: "Escolha a loja do seu servidor",
+        shopWarn: "Certifique-se de entrar na loja correta do seu servidor.",
+        shopHint: "Escolha a loja correta da sua região e tier do servidor.",
+        openStore: "Abrir loja",
+        officialStore: "Loja oficial do servidor",
+        serversKicker: "Rust PvE",
+        serversTitle: "Servidores",
+        serversIntro: "Entre no servidor certo, copie a conexão e acompanhe os players em tempo real.",
+        customMap: "Experiência PvE customizada, economia balanceada, eventos e staff ativa.",
+        players: "players",
+        syncing: "Atualizando",
+        online: "Online",
+        offline: "Offline",
+        region: "Região",
+        connection: "Conexão",
+        copy: "Copiar conexão",
+        copyAlert: "Comando copiado. Cole no console do Rust com F1.",
+        info: "Detalhes",
+        rulesKicker: "Comunidade",
+        rulesTitle: "Regras",
+        rules: ["Sem grief / PvP apenas em eventos", "Respeite jogadores e staff", "Cheats e exploits resultam em ban", "Reporte bugs e problemas no Discord"],
+        staffKicker: "Administração",
+        staffTitle: "Staff",
+        staffText: "Servidor com presença de staff, canais de suporte e comunicação direta com a comunidade.",
+        discordTitle: "Junte-se à comunidade",
+        discordText: "Tire dúvidas, veja anúncios e eventos, participe de sorteios e fale com o staff.",
+        discordCta: "Entrar no Discord",
+        tierLabel: "Servidor 10X",
+        footerText: "© 2026 Masters. Não afiliado à Facepunch.",
+        feats10x: ["Progressão rápida", "Economia MP$", "Eventos e bases raidáveis", "Staff ativa"]
+      },
+      en: {
+        pageTitle: "The Masters Servers | Rust PvE",
+        navServers: "Servers",
+        navStores: "Stores",
+        navRules: "Rules",
+        navStaff: "Staff",
+        navDiscord: "Discord",
+        heroBadge: "PvE BR / LATAM / EU",
+        tagline: "Play fair. Build big. Have fun.",
+        trustOneTitle: "Organized PvE",
+        trustOneText: "Clear rules and fun-first gameplay.",
+        trustTwoTitle: "Active staff",
+        trustTwoText: "Support and updates in the community.",
+        trustThreeTitle: "Official stores",
+        trustThreeText: "The right store for each region.",
+        seeServers: "View servers",
+        officialStores: "Official stores",
+        liveTitle: "Live servers",
+        liveText: "Public status from BattleMetrics.",
+        storesKicker: "Official stores",
+        shopTitle: "Choose your server store",
+        shopWarn: "Make sure you are entering the correct store for your server.",
+        shopHint: "Choose the right store for your region and server tier.",
+        openStore: "Open store",
+        officialStore: "Official server store",
+        serversKicker: "Rust PvE",
+        serversTitle: "Servers",
+        serversIntro: "Join the right server, copy the connection and watch live player counts.",
+        customMap: "Custom PvE experience, balanced economy, events and active staff.",
+        players: "players",
+        syncing: "Syncing",
+        online: "Online",
+        offline: "Offline",
+        region: "Region",
+        connection: "Connection",
+        copy: "Copy connection",
+        copyAlert: "Connect command copied. Paste it in the Rust console with F1.",
+        info: "Details",
+        rulesKicker: "Community",
+        rulesTitle: "Rules",
+        rules: ["No grief / PvP only in events", "Respect players and staff", "Cheats and exploits result in a ban", "Report bugs and issues on Discord"],
+        staffKicker: "Administration",
+        staffTitle: "Staff",
+        staffText: "A server with staff presence, support channels and direct community communication.",
+        discordTitle: "Join the community",
+        discordText: "Ask questions, follow announcements and events, join giveaways and talk to staff.",
+        discordCta: "Join Discord",
+        tierLabel: "10X Server",
+        footerText: "© 2026 Masters. Not affiliated with Facepunch.",
+        feats10x: ["Fast progression", "MP$ economy", "Events and raidable bases", "Active staff"]
       },
       es: {
-        tagline: "Juega limpio. Construye a lo grande. Diviértete.",
-        serversTitle: "Servidores",
-        rulesTitle: "Reglas",
-        shop: "Abrir Tienda",
-        shopHint: "Elige la tienda correcta para tu región y tier del servidor.",
-        shopWarn: "Asegúrate de entrar en la tienda correcta de tu servidor.",
-        customMap: "Experiencia PvE personalizada, economía balanceada, staff activo.",
-        info: "Info",
-        copy: "Copiar Conexión",
-        copyAlert: "¡Comando copiado! Pégalo en la consola de Rust (F1).",
+        pageTitle: "The Masters Servers | Rust PvE",
+        navServers: "Servidores",
+        navStores: "Tiendas",
+        navRules: "Reglas",
+        navStaff: "Staff",
         navDiscord: "Discord",
-        feats2x: ["Balance PvE", "Economía MP$", "Eventos & Bases Raideables", "Staff activo"],
-        feats10x:["Progresión rápida", "Economía MP$", "Eventos & Bases Raideables", "Staff activo"],
+        heroBadge: "PvE BR / LATAM / EU",
+        tagline: "Juega limpio. Construye a lo grande. Diviértete.",
+        trustOneTitle: "PvE organizado",
+        trustOneText: "Reglas claras y diversión primero.",
+        trustTwoTitle: "Staff activo",
+        trustTwoText: "Soporte y avisos en la comunidad.",
+        trustThreeTitle: "Tiendas oficiales",
+        trustThreeText: "La tienda correcta para cada región.",
+        seeServers: "Ver servidores",
+        officialStores: "Tiendas oficiales",
+        liveTitle: "Servidores en vivo",
+        liveText: "Estado público vía BattleMetrics.",
+        storesKicker: "Tiendas oficiales",
+        shopTitle: "Elige la tienda de tu servidor",
+        shopWarn: "Asegúrate de entrar en la tienda correcta de tu servidor.",
+        shopHint: "Elige la tienda correcta para tu región y tier del servidor.",
+        openStore: "Abrir tienda",
+        officialStore: "Tienda oficial del servidor",
+        serversKicker: "Rust PvE",
+        serversTitle: "Servidores",
+        serversIntro: "Entra al servidor correcto, copia la conexión y mira los jugadores en vivo.",
+        customMap: "Experiencia PvE personalizada, economía balanceada, eventos y staff activo.",
+        players: "jugadores",
+        syncing: "Actualizando",
+        online: "Online",
+        offline: "Offline",
+        region: "Región",
+        connection: "Conexión",
+        copy: "Copiar conexión",
+        copyAlert: "Comando copiado. Pégalo en la consola de Rust con F1.",
+        info: "Detalles",
+        rulesKicker: "Comunidad",
+        rulesTitle: "Reglas",
+        rules: ["Sin grief / PvP solo en eventos", "Respeta a jugadores y staff", "Cheats y exploits resultan en ban", "Reporta bugs y problemas en Discord"],
+        staffKicker: "Administración",
+        staffTitle: "Staff",
+        staffText: "Servidor con presencia de staff, canales de soporte y comunicación directa con la comunidad.",
+        discordTitle: "Únete a la comunidad",
+        discordText: "Haz preguntas, mira anuncios y eventos, participa en sorteos y habla con el staff.",
+        discordCta: "Entrar al Discord",
+        tierLabel: "Servidor 10X",
+        footerText: "© 2026 Masters. No afiliado a Facepunch.",
+        feats10x: ["Progresión rápida", "Economía MP$", "Eventos y bases raideables", "Staff activo"]
       }
     };
 
-    // ---------------- HELPERS ----------------
-    function esc(s){return (s||'').replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
-
-    async function fetchBM(bmId, signal){
-      const res = await fetch(`https://api.battlemetrics.com/servers/${bmId}`, {cache:"no-store", signal});
-      if (!res.ok) throw new Error("HTTP "+res.status);
-      return res.json();
+    function esc(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
     }
 
-    async function updatePlayerCounts(controller){
-      await Promise.all(SERVERS.map(async (s)=>{
-        try{
-          const j = await fetchBM(s.bmId, controller?.signal);
-          s.players  = j.data?.attributes?.players ?? 0;
-          s.max      = j.data?.attributes?.maxPlayers ?? 0;
-          s.realname = j.data?.attributes?.name || s.name;
-        }catch(e){
-          // keep previous values on failure
-          s.players = s.players ?? 0;
-          s.max = s.max ?? 0;
-          s.realname = s.realname ?? s.name;
+    function currentLang() {
+      const selected = document.getElementById("lang").value;
+      return I18N[selected] ? selected : "pt";
+    }
+
+    function currentText() {
+      return I18N[currentLang()] || I18N.pt;
+    }
+
+    function statusInfo(server, t) {
+      if (server.status === "online") return { label: t.online, className: "status-online" };
+      if (server.status === "offline") return { label: t.offline, className: "status-offline" };
+      return { label: t.syncing, className: "status-sync" };
+    }
+
+    function playerPercent(server) {
+      if (!Number.isFinite(server.players) || !Number.isFinite(server.max) || server.max <= 0) return 0;
+      return Math.max(0, Math.min(100, (server.players / server.max) * 100));
+    }
+
+    function playerText(server, t) {
+      if (!Number.isFinite(server.players) || !Number.isFinite(server.max)) return t.syncing;
+      return `${server.players} / ${server.max} ${t.players}`;
+    }
+
+    async function fetchBM(bmId, signal) {
+      const response = await fetch(`https://api.battlemetrics.com/servers/${bmId}`, { cache: "no-store", signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    }
+
+    async function updatePlayerCounts(controller) {
+      await Promise.all(SERVERS.map(async (server) => {
+        try {
+          const json = await fetchBM(server.bmId, controller?.signal);
+          const attrs = json.data?.attributes || {};
+          server.players = attrs.players ?? 0;
+          server.max = attrs.maxPlayers ?? 0;
+          server.realname = attrs.name || server.name;
+          server.status = attrs.status || "online";
+        } catch {
+          server.players = server.players;
+          server.max = server.max;
+          server.realname = server.realname || server.name;
+          server.status = server.status || "syncing";
         }
       }));
     }
 
-    // ---------------- RENDER ----------------
-    function buildServerCard(s, t){
-      const card = document.createElement('div');
-      card.className='card rounded-xl overflow-hidden soft-shadow';
-      card.id = `server-${s.bmId}`;
-      card.innerHTML = `
-        <div>
-          <img src="${s.banner}" class="w-full" style="aspect-ratio:1280/600; object-fit:contain;" alt="banner"/>
+    function renderLivePanel() {
+      const t = currentText();
+      const wrap = document.getElementById("heroServerList");
+      wrap.innerHTML = SERVERS.map((server) => {
+        const status = statusInfo(server, t);
+        return `
+          <div class="rounded-lg border border-white/10 bg-zinc-950/45 p-3" data-live-card="${esc(server.bmId)}">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <p class="truncate text-sm font-black text-white" data-server-title="${esc(server.bmId)}">${esc(server.realname || server.name)}</p>
+                <p class="mt-1 text-xs font-bold text-zinc-400">${esc(server.region)} - ${esc(server.tier)}</p>
+              </div>
+              <span class="status-pill ${status.className}" data-status="${esc(server.bmId)}">${esc(status.label)}</span>
+            </div>
+            <div class="mt-3">
+              <div class="bar-track"><div class="bar-fill" data-player-bar="${esc(server.bmId)}"></div></div>
+              <p class="mt-2 text-xs font-bold text-zinc-400" data-player-text="${esc(server.bmId)}">${esc(playerText(server, t))}</p>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderShops() {
+      const t = currentText();
+      const wrap = document.getElementById("shopButtons");
+      wrap.innerHTML = SERVERS.map((server) => `
+        <a href="${esc(server.store)}" target="_blank" rel="noopener noreferrer" class="shop-card group block p-5" aria-label="${esc(t.openStore)} - ${esc(server.name)}">
+          <div class="flex items-center justify-between gap-3">
+            <span class="chip">${esc(server.region)}</span>
+            <span class="chip">${esc(server.tier)}</span>
+          </div>
+          <h3 class="mt-5 text-xl font-black text-white">${esc(server.name)}</h3>
+          <p class="mt-2 text-sm font-medium leading-6 text-zinc-400">${esc(t.officialStore)}</p>
+          <span class="btn btn-store mt-5 w-full">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+            ${esc(t.openStore)}
+            <svg class="h-4 w-4 opacity-80 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          </span>
+        </a>
+      `).join("");
+    }
+
+    function renderServers() {
+      const t = currentText();
+      const wrap = document.getElementById("serverGrid");
+      wrap.innerHTML = SERVERS.map((server) => {
+        const status = statusInfo(server, t);
+        const features = (t.feats10x || []).map((feature) => `
+          <span class="feature-pill">
+            <svg class="h-3.5 w-3.5 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+            ${esc(feature)}
+          </span>
+        `).join("");
+
+        return `
+          <article class="server-card overflow-hidden" data-server-card="${esc(server.bmId)}">
+            <div class="server-media">
+              <img src="${esc(server.banner)}" alt="${esc(server.name)} banner" />
+              <div class="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3">
+                <span class="chip">${esc(server.region)}</span>
+                <span class="status-pill ${status.className}" data-status="${esc(server.bmId)}">${esc(status.label)}</span>
+              </div>
+            </div>
+            <div class="p-5">
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div class="min-w-0">
+                  <h3 class="text-2xl font-black leading-tight text-white" data-server-title="${esc(server.bmId)}">${esc(server.realname || server.name)}</h3>
+                  <p class="mt-2 text-sm font-medium leading-6 text-zinc-400">${esc(t.customMap)}</p>
+                </div>
+                <span class="chip shrink-0">${esc(server.tier)}</span>
+              </div>
+
+              <div class="mt-5 grid gap-3 sm:grid-cols-2">
+                <div class="info-box">
+                  <span>${esc(t.region)}</span>
+                  <strong>${esc(server.region)}</strong>
+                </div>
+                <div class="info-box">
+                  <span>${esc(t.connection)}</span>
+                  <strong>${esc(server.ip)}</strong>
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <div class="bar-track"><div class="bar-fill" data-player-bar="${esc(server.bmId)}"></div></div>
+                <p class="mt-2 text-sm font-black text-zinc-300" data-player-text="${esc(server.bmId)}">${esc(playerText(server, t))}</p>
+              </div>
+
+              <div class="mt-4 flex flex-wrap gap-2">${features}</div>
+
+              <div class="mt-5 flex flex-wrap gap-3">
+                <button type="button" class="btn btn-primary" data-copy-ip="${esc(server.ip)}">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 8h10v10H8z"/><path d="M6 16H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  ${esc(t.copy)}
+                </button>
+                <a href="${esc(server.store)}" target="_blank" rel="noopener noreferrer" class="btn btn-store">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                  ${esc(t.openStore)}
+                </a>
+                <button type="button" class="btn btn-muted" data-info-id="${esc(server.bmId)}">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                  ${esc(t.info)}
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+      updateDynamicUI();
+    }
+
+    function renderRules() {
+      const t = currentText();
+      const wrap = document.getElementById("rulesGrid");
+      wrap.innerHTML = t.rules.map((rule, index) => `
+        <div class="rule-item">
+          <span class="rule-number">${index + 1}</span>
+          <span>${esc(rule)}</span>
         </div>
-        <div class="p-5">
-          <h3 class="text-xl font-bold mb-1 server-name">${esc(s.realname || s.name)}</h3>
-          <p class="text-zinc-400 text-sm mb-3">${t.customMap}</p>
-          <div class="w-full bg-zinc-800 h-3 rounded-full overflow-hidden mb-2">
-            <div class="bg-emerald-500 h-full transition-[width] duration-500 server-bar" style="width:0%"></div>
-          </div>
-          <p class="text-sm text-zinc-400 mb-3 server-players">0 / 0 players</p>
-          <div class="flex items-center gap-2 mt-1">
-            <button class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-black font-semibold px-3 py-2 rounded-md"
-                    onclick="navigator.clipboard.writeText('client.connect ${s.ip}').then(()=>alert('${t.copyAlert}'))">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m-4-4v12"/></svg>
-              ${t.copy}
-            </button>
-            <a href="${s.store}" target="_blank" class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold px-3 py-2 rounded-md">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
-              ${t.shop}
-            </a>
-            <button class="ml-auto inline-flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold px-3 py-2 rounded-md"
-                    onclick="openModal('${s.bmId}','${s.banner}','${esc(s.realname || s.name)}','${s.tier}')">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-              ${t.info}
-            </button>
-          </div>
-        </div>`;
-      return card;
+      `).join("");
     }
 
-    function updateServerUI(){
-      const lang = document.getElementById('lang').value || 'en';
-      const t = I18N[lang] || I18N.pt;
-      for (const s of SERVERS){
-        const root = document.getElementById(`server-${s.bmId}`);
-        if (!root) continue;
-        const nameEl    = root.querySelector('.server-name');
-        const barEl     = root.querySelector('.server-bar');
-        const playersEl = root.querySelector('.server-players');
-
-        if (nameEl)    nameEl.textContent = (s.realname || s.name);
-        const pct = (s.players && s.max) ? (s.players / s.max * 100) : 0;
-        if (barEl) requestAnimationFrame(()=>{ barEl.style.width = `${pct.toFixed(1)}%`; });
-        if (playersEl) playersEl.textContent = `${s.players||0} / ${s.max||0} players`;
-      }
-    }
-
-    function renderServersInitial(){
-      const grid = document.getElementById('serverGrid');
-      if (!grid) return;
-      if (grid.children.length) return; // render only once
-      const lang = document.getElementById('lang').value || 'en';
-      const t = I18N[lang] || I18N.pt;
-      const frag = document.createDocumentFragment();
-      SERVERS.forEach(s => frag.appendChild(buildServerCard(s, t)));
-      grid.appendChild(frag);
-      updateServerUI();
-    }
-
-    function renderShops(){
-      const lang = document.getElementById('lang').value || 'en';
-      const t = I18N[lang] || I18N.pt;
-      const wrap = document.getElementById('shopButtons');
-      if (!wrap) return;
-      wrap.innerHTML = '';
-      SERVERS.forEach((s)=>{
-        const a = document.createElement('a');
-        a.href = s.store;
-        a.target = '_blank';
-        a.className = 'inline-flex items-center gap-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2';
-        a.textContent = `${s.name} — ${t.shop}`;
-        wrap.appendChild(a);
+    function renderText() {
+      const lang = currentLang();
+      const t = currentText();
+      document.documentElement.lang = lang === "pt" ? "pt-BR" : lang;
+      document.title = t.pageTitle;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        const key = node.getAttribute("data-i18n");
+        if (t[key]) node.textContent = t[key];
       });
-      const hint = document.createElement('p');
-      hint.className = 'w-full text-center text-sm text-zinc-300 mt-2';
-      hint.textContent = (t.shopHint || '');
-      wrap.appendChild(hint);
+      document.getElementById("heroText").textContent = t.tagline;
     }
 
-    function renderRules(){
-      const lang = document.getElementById('lang').value || 'en';
-      const t = I18N[lang] || I18N.pt;
-      const wrap = document.getElementById('rulesGrid'); if (!wrap) return;
-      wrap.innerHTML = '';
-      const rules = (lang==='en'
-        ? ["No grief / PvP only in events", "Respect players and staff", "Cheats & exploits = ban", "Report bugs on Discord"]
-        : lang==='pt'
-        ? ["Sem grief / PvP apenas em eventos", "Respeite jogadores e staff", "Cheats & exploits = ban", "Reporte bugs no Discord"]
-        : ["Sin grief / PvP solo en eventos", "Respeta a jugadores y staff", "Cheats & exploits = ban", "Reporta bugs en Discord"]);
-      rules.forEach(txt=>{ const d=document.createElement('div'); d.className='card rounded-xl p-5'; d.textContent=txt; wrap.appendChild(d); });
+    function updateDynamicUI() {
+      const t = currentText();
+      SERVERS.forEach((server) => {
+        const status = statusInfo(server, t);
+        const percent = playerPercent(server);
+        document.querySelectorAll(`[data-server-title="${server.bmId}"]`).forEach((node) => {
+          node.textContent = server.realname || server.name;
+        });
+        document.querySelectorAll(`[data-player-text="${server.bmId}"]`).forEach((node) => {
+          node.textContent = playerText(server, t);
+        });
+        document.querySelectorAll(`[data-player-bar="${server.bmId}"]`).forEach((node) => {
+          requestAnimationFrame(() => { node.style.width = `${percent.toFixed(1)}%`; });
+        });
+        document.querySelectorAll(`[data-status="${server.bmId}"]`).forEach((node) => {
+          node.textContent = status.label;
+          node.className = `status-pill ${status.className}`;
+        });
+      });
     }
 
-    function renderLang(){
-      const lang = document.getElementById('lang').value || 'en';
-      const t = I18N[lang]||I18N.pt;
-      document.querySelectorAll('[data-i18n]').forEach(el=>{ const k=el.getAttribute('data-i18n'); if (t[k]) el.textContent = t[k]; });
-      document.getElementById('heroText').textContent = t.tagline;
-      renderShops(); renderRules(); renderServersInitial();
+    function renderAll() {
+      renderText();
+      renderLivePanel();
+      renderShops();
+      renderServers();
+      renderRules();
     }
 
-    async function openModal(id,img,name,tier){
-      document.getElementById('modalImg').src = img;
-      const found = SERVERS.find(s=>s.bmId===id);
-      document.getElementById('modalTitle').textContent = (found && (found.realname||found.name)) || name;
-      const lang = document.getElementById('lang').value || 'en';
-      document.getElementById('modalSub').textContent = (tier==='2x'? (lang==='en'?'2X Servers':lang==='es'?'Servidores 2X':'Servidores 2X') : (lang==='en'?'10X Servers':lang==='es'?'Servidores 10X':'Servidores 10X'));
-      document.getElementById('modalBM').href = `https://www.battlemetrics.com/servers/rust/${id}`;
-      try{
-        const j = await fetchBM(id);
-        document.getElementById('playerCount').textContent = `${j.data.attributes.players} / ${j.data.attributes.maxPlayers} players online`;
-      }catch{
-        document.getElementById('playerCount').textContent = '';
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2800);
+    }
+
+    async function copyConnect(ip) {
+      const t = currentText();
+      const command = `client.connect ${ip}`;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(command);
+        } else {
+          throw new Error("Clipboard API unavailable");
+        }
+      } catch {
+        const textArea = document.createElement("textarea");
+        textArea.value = command;
+        textArea.setAttribute("readonly", "");
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        textArea.remove();
       }
-      const m = document.getElementById('infoModal'); m.classList.remove('hidden'); m.classList.add('flex');
+      showToast(t.copyAlert);
     }
-    function closeModal(){ const m=document.getElementById('infoModal'); m.classList.add('hidden'); m.classList.remove('flex'); }
 
-    document.getElementById('lang').addEventListener('change', ()=>{
-      renderLang();
-      updateServerUI();
+    async function openModal(id) {
+      const server = SERVERS.find((item) => item.bmId === id);
+      if (!server) return;
+      const t = currentText();
+      document.getElementById("modalImg").src = server.banner;
+      document.getElementById("modalTitle").textContent = server.realname || server.name;
+      document.getElementById("modalSub").textContent = `${t.tierLabel} - ${server.region}`;
+      document.getElementById("modalIp").textContent = server.ip;
+      document.getElementById("modalBM").href = `https://www.battlemetrics.com/servers/rust/${server.bmId}`;
+      document.getElementById("modalStore").href = server.store;
+      document.getElementById("playerCount").textContent = playerText(server, t);
+
+      const modal = document.getElementById("infoModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      try {
+        const json = await fetchBM(server.bmId);
+        const attrs = json.data?.attributes || {};
+        server.players = attrs.players ?? server.players ?? 0;
+        server.max = attrs.maxPlayers ?? server.max ?? 0;
+        server.realname = attrs.name || server.realname || server.name;
+        server.status = attrs.status || server.status || "online";
+        document.getElementById("modalTitle").textContent = server.realname || server.name;
+        document.getElementById("playerCount").textContent = playerText(server, t);
+        updateDynamicUI();
+      } catch {
+        document.getElementById("playerCount").textContent = playerText(server, t);
+      }
+    }
+
+    function closeModal() {
+      const modal = document.getElementById("infoModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    document.addEventListener("click", (event) => {
+      const copyButton = event.target.closest("[data-copy-ip]");
+      if (copyButton) {
+        copyConnect(copyButton.getAttribute("data-copy-ip"));
+        return;
+      }
+
+      const infoButton = event.target.closest("[data-info-id]");
+      if (infoButton) {
+        openModal(infoButton.getAttribute("data-info-id"));
+        return;
+      }
+
+      if (event.target.closest("[data-close-modal]") || event.target.id === "infoModal") {
+        closeModal();
+      }
     });
 
-    // --------------- BOOT + POLLING (every 30s) ---------------
-    (async ()=>{
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeModal();
+    });
+
+    document.getElementById("lang").addEventListener("change", (event) => {
+      localStorage.setItem("mastersLang", event.target.value);
+      renderAll();
+      updateDynamicUI();
+    });
+
+    (async () => {
+      const savedLang = localStorage.getItem("mastersLang");
+      if (savedLang && I18N[savedLang]) document.getElementById("lang").value = savedLang;
+
+      document.querySelectorAll('a[href="https://discord.gg/the-masters"]').forEach((link) => {
+        link.href = DISCORD_URL;
+      });
+
+      renderAll();
       const controller = new AbortController();
-      // Initial render (servers cards once) then fetch+update UI
-      renderLang();
       await updatePlayerCounts(controller);
-      updateServerUI();
-      // Poll every 30s without flicker
-      setInterval(async ()=>{
-        const c = new AbortController();
-        // 10s safety timeout
-        const to = setTimeout(()=>c.abort(), 10000);
-        try{
-          await updatePlayerCounts(c);
-          updateServerUI();
+      renderAll();
+
+      setInterval(async () => {
+        const pollingController = new AbortController();
+        const timeout = setTimeout(() => pollingController.abort(), 10000);
+        try {
+          await updatePlayerCounts(pollingController);
+          updateDynamicUI();
         } finally {
-          clearTimeout(to);
+          clearTimeout(timeout);
         }
       }, 30000);
     })();

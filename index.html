@@ -362,6 +362,7 @@
 
     .server-card.compact .server-title {
       min-height: 3.1rem;
+      overflow-wrap: anywhere;
     }
 
     .connection-row {
@@ -550,23 +551,223 @@
     }
 
     @media (max-width: 768px) {
-      .hero-bg { background-attachment: scroll; }
-      .server-hub {
+      html {
+        height: auto;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      body {
+        height: auto;
+        min-height: 100svh;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+
+      .hero-bg {
+        display: block;
+        min-height: 100svh;
+        height: auto;
+        overflow: visible;
+        background-attachment: scroll;
+        background-position: center top;
+      }
+
+      .nav-shell nav {
+        gap: .65rem;
+        padding: .65rem .75rem;
+      }
+
+      .nav-shell a[aria-label="The Masters"] {
+        flex: 1 1 auto;
+        gap: .65rem;
+      }
+
+      .nav-shell img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .nav-shell select {
+        max-width: 122px;
+        height: 40px;
+        padding-inline: .65rem;
+        font-size: .78rem;
+      }
+
+      .nav-shell .btn-discord {
+        flex: 0 0 40px;
+        width: 40px;
+        min-height: 40px;
+        padding: 0;
+      }
+
+      .app-main {
+        min-height: auto;
+        overflow: visible;
+        padding: 12px 10px 8px;
+      }
+
+      .server-stage {
+        width: 100%;
+        height: auto;
         min-height: 0;
+      }
+
+      .server-hub {
+        display: block;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+      }
+
+      .server-hub-header {
+        position: relative;
+      }
+
+      .server-scroll {
+        overflow: visible;
+        padding: .85rem !important;
+      }
+
+      .server-scroll-grid {
+        grid-template-columns: 1fr;
+        gap: .85rem;
+      }
+
+      .server-card.compact .server-media img {
+        aspect-ratio: 16 / 9;
+      }
+
+      .server-card.compact .server-title {
+        min-height: auto;
+        font-size: 1.08rem;
+      }
+
+      .server-card.compact .btn {
+        width: auto;
+        white-space: normal;
+      }
+
+      .server-card.compact .btn-muted {
+        flex: 1 1 150px;
+      }
+
+      .server-card.compact .server-store-action {
+        flex: 0 0 48px;
+        width: 48px;
+      }
+
+      .connection-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: .5rem;
+      }
+
+      .connection-label {
+        grid-column: 1 / -1;
+      }
+
+      .connection-value {
+        font-size: .82rem;
       }
 
       .store-dock {
         grid-template-columns: 1fr;
+        gap: .75rem;
       }
 
       .store-dock-shell {
         width: calc(100% - 20px);
-        margin-bottom: 10px;
+        margin: 0 auto 12px;
       }
 
-      .btn {
+      .store-grid {
+        grid-template-columns: 1fr;
+        gap: .7rem;
+      }
+
+      .store-card {
+        grid-template-columns: 1fr !important;
+        min-height: 0;
+        gap: .75rem;
+      }
+
+      .store-card .btn {
         width: 100%;
+        min-height: 46px;
+        padding: .7rem .85rem;
+        font-size: .92rem;
         white-space: normal;
+      }
+
+      .store-card h3 {
+        font-size: 1rem;
+      }
+
+      .modal-backdrop {
+        align-items: flex-start;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .modal-panel {
+        max-height: calc(100svh - 20px);
+        overflow-y: auto !important;
+      }
+
+      .toast {
+        width: calc(100% - 24px);
+        bottom: 12px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-shell a[aria-label="The Masters"] p:first-child {
+        font-size: 1rem;
+      }
+
+      .nav-shell a[aria-label="The Masters"] p:last-child {
+        max-width: 155px;
+      }
+
+      .server-hub-header {
+        padding: .75rem !important;
+      }
+
+      #serverHubTitle {
+        font-size: 1.55rem;
+      }
+
+      .eyebrow {
+        max-width: 100%;
+        font-size: .72rem;
+      }
+
+      .chip,
+      .status-pill {
+        font-size: .68rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .nav-shell a[aria-label="The Masters"] p:last-child {
+        display: none;
+      }
+
+      .nav-shell select {
+        max-width: 108px;
+      }
+
+      .nav-shell .btn-discord {
+        flex-basis: 38px;
+        width: 38px;
+      }
+
+      .server-card.compact .server-store-action {
+        flex-basis: 44px;
+        width: 44px;
       }
     }
   </style>

@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="The Masters Rust PvE Servers - US, EU e BR LATAM." />
   <meta name="theme-color" content="#09090b" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="The Masters | Rust PvE Servers" />
+  <meta property="og:description" content="Status ao vivo dos servidores Rust PvE The Masters — US, EU e BR/LATAM." />
+  <meta property="og:image" content="https://the-masters-rust-status.gjpardal.chatgpt.site/og.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Masters | Rust PvE Servers" />
+  <meta name="twitter:description" content="Status ao vivo, conexão rápida e lojas oficiais." />
+  <meta name="twitter:image" content="https://the-masters-rust-status.gjpardal.chatgpt.site/og.png" />
   <title>The Masters Servers | Rust PvE</title>
   <link rel="icon" href="https://i.ibb.co/PsnxFTWW/LOGO.png" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -770,6 +778,431 @@
         width: 44px;
       }
     }
+
+    /* Visual refresh: a lighter, more spacious command center for the servers. */
+    html,
+    body {
+      height: auto;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body {
+      background: #050708;
+      font-family: "Segoe UI Variable", "Segoe UI", Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+
+    .hero-bg {
+      position: relative;
+      isolation: isolate;
+      display: block;
+      min-height: 100vh;
+      height: auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 10% -10%, rgba(16, 185, 129, .16), transparent 32rem),
+        radial-gradient(circle at 92% 2%, rgba(56, 189, 248, .12), transparent 30rem),
+        linear-gradient(180deg, #090c0d 0%, #050708 68%, #07090b 100%);
+    }
+
+    .hero-bg::before {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      opacity: .22;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .nav-shell {
+      background: rgba(5, 8, 9, .76);
+      border-bottom-color: rgba(255, 255, 255, .08);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, .18);
+    }
+
+    .nav-shell nav {
+      max-width: 1500px;
+      padding-block: 14px;
+    }
+
+    .nav-shell a[aria-label="The Masters"] img {
+      display: none;
+    }
+
+    .nav-shell a[aria-label="The Masters"]::before {
+      content: "M";
+      display: grid;
+      flex: 0 0 auto;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(110, 231, 183, .34);
+      border-radius: 14px;
+      background:
+        linear-gradient(145deg, rgba(52, 211, 153, .24), rgba(7, 10, 11, .96)),
+        #0b1110;
+      box-shadow: inset 0 1px rgba(255,255,255,.12), 0 10px 30px rgba(16,185,129,.12);
+      color: #a7f3d0;
+      font-size: 1.22rem;
+      font-weight: 950;
+    }
+
+    .top-action,
+    .nav-shell select {
+      min-height: 42px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .app-main {
+      min-height: 0;
+      overflow: visible;
+      padding: 38px 24px 22px;
+    }
+
+    .server-stage {
+      width: min(1500px, 100%);
+      height: auto;
+    }
+
+    .server-hub {
+      display: block;
+      height: auto;
+      overflow: visible;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .server-hub-header {
+      position: relative;
+      top: auto;
+      border: 0;
+      background: transparent;
+      padding: 0 4px 24px !important;
+      backdrop-filter: none;
+    }
+
+    #serverHubTitle {
+      font-size: clamp(2rem, 4vw, 3.35rem);
+      letter-spacing: -.055em;
+      line-height: .98;
+    }
+
+    .server-hub-header [data-i18n="serversIntro"] {
+      max-width: 680px;
+      margin-top: 12px;
+      color: #a1aaa7;
+      font-size: .98rem;
+    }
+
+    .eyebrow {
+      border-color: rgba(52,211,153,.26);
+      background: rgba(16,185,129,.09);
+      color: #a7f3d0;
+    }
+
+    .live-summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 190px;
+      border: 1px solid rgba(52, 211, 153, .2);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(16,185,129,.11), rgba(255,255,255,.035));
+      padding: 12px 15px;
+      box-shadow: inset 0 1px rgba(255,255,255,.07);
+    }
+
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #34d399;
+      box-shadow: 0 0 0 5px rgba(52,211,153,.09), 0 0 18px rgba(52,211,153,.7);
+      animation: livePulse 2.4s ease-in-out infinite;
+    }
+
+    .live-summary strong,
+    .live-summary span {
+      display: block;
+    }
+
+    .live-summary strong {
+      color: #f4fff9;
+      font-size: .86rem;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .live-summary span:last-child {
+      margin-top: 2px;
+      color: #8f9a96;
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    @keyframes livePulse {
+      50% { opacity: .55; transform: scale(.82); }
+    }
+
+    .server-scroll {
+      overflow: visible;
+      padding: 0 !important;
+    }
+
+    .server-scroll-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .server-card.compact {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 22px;
+      background: linear-gradient(165deg, rgba(20,24,24,.96), rgba(8,10,11,.98));
+      box-shadow: 0 24px 70px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.05);
+    }
+
+    .server-card.compact::before {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 22px;
+      right: 22px;
+      height: 2px;
+      border-radius: 0 0 999px 999px;
+      background: var(--card-accent, #34d399);
+      box-shadow: 0 0 24px var(--card-accent, #34d399);
+    }
+
+    .server-card[data-region="US"] { --card-accent: #38bdf8; --card-rgb: 56,189,248; }
+    .server-card[data-region="EU"] { --card-accent: #a78bfa; --card-rgb: 167,139,250; }
+    .server-card[data-region="BR LATAM"] { --card-accent: #34d399; --card-rgb: 52,211,153; }
+
+    .server-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(var(--card-rgb, 52,211,153), .32);
+      background: linear-gradient(165deg, rgba(24,29,28,.98), rgba(9,11,12,.99));
+      box-shadow: 0 30px 80px rgba(0,0,0,.38), 0 0 45px rgba(var(--card-rgb, 52,211,153), .07);
+    }
+
+    .server-media {
+      height: auto;
+      aspect-ratio: 2 / 1;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(var(--card-rgb, 52,211,153), .25), transparent 42%),
+        linear-gradient(135deg, rgba(var(--card-rgb, 52,211,153), .12), rgba(5,8,9,.96) 68%);
+    }
+
+    .server-media::before {
+      content: attr(data-region);
+      position: absolute;
+      right: 18px;
+      bottom: -17px;
+      color: rgba(255,255,255,.055);
+      font-size: clamp(4rem, 6vw, 6.4rem);
+      font-weight: 950;
+      letter-spacing: -.08em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .server-media::after {
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.03), rgba(6,8,9,.86)),
+        linear-gradient(90deg, rgba(0,0,0,.32), transparent);
+    }
+
+    .server-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: auto !important;
+      object-fit: cover;
+      object-position: center;
+      opacity: .46;
+      filter: saturate(.88) contrast(1.06);
+    }
+
+    .server-card.compact .server-title {
+      min-height: 3.2rem;
+      color: #f7faf9;
+      font-size: 1.08rem;
+      letter-spacing: -.02em;
+    }
+
+    .server-card.compact > .p-4 {
+      padding: 20px;
+    }
+
+    .server-card .chip {
+      border-color: rgba(var(--card-rgb, 52,211,153), .22);
+      background: rgba(var(--card-rgb, 52,211,153), .08);
+      color: #edfdf7;
+    }
+
+    .connection-row {
+      border-color: rgba(255,255,255,.07);
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+      padding: 10px 11px;
+    }
+
+    .connection-label {
+      color: #6f7976;
+    }
+
+    .connection-value {
+      font-size: .82rem;
+      letter-spacing: .01em;
+    }
+
+    .copy-mini {
+      border-color: rgba(var(--card-rgb, 52,211,153), .24);
+      border-radius: 10px;
+      background: rgba(var(--card-rgb, 52,211,153), .1);
+      color: var(--card-accent, #86efac);
+    }
+
+    .bar-track {
+      height: 6px;
+      background: rgba(255,255,255,.07);
+    }
+
+    .bar-fill {
+      background: linear-gradient(90deg, var(--card-accent, #34d399), #fbbf24);
+      box-shadow: 0 0 16px rgba(var(--card-rgb, 52,211,153), .35);
+    }
+
+    .server-card.compact .btn {
+      min-height: 44px;
+      border-radius: 12px;
+    }
+
+    .server-card.compact .server-store-action {
+      flex: 1 1 150px;
+      width: auto;
+      padding-inline: .9rem;
+      background: linear-gradient(135deg, var(--card-accent, #34d399), rgba(var(--card-rgb, 52,211,153), .66));
+      box-shadow: 0 12px 30px rgba(var(--card-rgb, 52,211,153), .18);
+    }
+
+    .store-section {
+      position: static;
+      width: 100%;
+      padding: 34px 24px 58px;
+    }
+
+    .store-dock-shell {
+      position: static;
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      border-color: rgba(255,255,255,.08);
+      border-radius: 22px;
+    }
+
+    .store-dock {
+      position: static;
+      gap: 26px;
+      grid-template-columns: minmax(210px, .32fr) minmax(0, 1.68fr);
+      border: 1px solid rgba(255,255,255,.08);
+      background:
+        radial-gradient(circle at 88% 0%, rgba(255,255,255,.055), transparent 35%),
+        rgba(10,13,15,.9);
+      box-shadow: 0 24px 70px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.04);
+      padding: 20px !important;
+    }
+
+    .store-card {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      min-height: 88px;
+      border-color: rgba(var(--store-rgb, 56,189,248), .2);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 92% 0%, rgba(var(--store-rgb, 56,189,248), .15), transparent 42%),
+        rgba(255,255,255,.032);
+      box-shadow: none;
+    }
+
+    .store-card::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: var(--store-accent, #38bdf8);
+      box-shadow: 0 0 22px var(--store-accent, #38bdf8);
+    }
+
+    .store-card::after {
+      content: attr(data-region);
+      position: absolute;
+      z-index: -1;
+      right: 12px;
+      bottom: -10px;
+      color: rgba(var(--store-rgb, 56,189,248), .07);
+      font-size: 3.25rem;
+      font-weight: 950;
+      letter-spacing: -.08em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .store-card[data-region="US"] { --store-accent: #38bdf8; --store-rgb: 56,189,248; }
+    .store-card[data-region="EU"] { --store-accent: #a78bfa; --store-rgb: 167,139,250; }
+    .store-card[data-region="BR LATAM"] { --store-accent: #34d399; --store-rgb: 52,211,153; }
+
+    .store-card:hover {
+      border-color: rgba(var(--store-rgb, 56,189,248), .4);
+      background:
+        radial-gradient(circle at 92% 0%, rgba(var(--store-rgb, 56,189,248), .22), transparent 44%),
+        rgba(var(--store-rgb, 56,189,248), .055);
+      box-shadow: 0 18px 42px rgba(var(--store-rgb, 56,189,248), .09);
+    }
+
+    .store-card .chip {
+      border-color: rgba(var(--store-rgb, 56,189,248), .24);
+      background: rgba(var(--store-rgb, 56,189,248), .09);
+      color: #f4f4f5;
+    }
+
+    .store-card .btn {
+      min-height: 46px;
+      border-radius: 12px;
+      border: 0;
+      background: linear-gradient(135deg, var(--store-accent, #38bdf8), rgba(var(--store-rgb, 56,189,248), .68));
+      box-shadow: 0 12px 28px rgba(var(--store-rgb, 56,189,248), .22);
+      font-size: .88rem;
+    }
+
+    @media (max-width: 980px) {
+      .server-scroll-grid { grid-template-columns: 1fr; }
+      .server-media { height: auto; aspect-ratio: 2 / 1; }
+      .store-dock { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .app-main { padding: 28px 12px 16px; }
+      .server-hub-header { padding-inline: 2px !important; }
+      .server-hub-header > div { align-items: flex-start; }
+      .live-summary { width: 100%; }
+      .store-section { padding: 24px 12px 42px; }
+      .store-dock-shell { width: 100%; margin: 0; }
+      .server-card.compact .server-store-action { flex: 1 1 150px; width: auto; }
+    }
   </style>
 </head>
 <body>
@@ -834,10 +1267,13 @@
                 </div>
                 <p class="mt-1 max-w-2xl text-xs font-bold leading-5 text-zinc-400" data-i18n="serversIntro">Status ao vivo, conexão rápida e loja sempre à mão.</p>
               </div>
-              <span class="chip">
-                <svg class="h-3.5 w-3.5 text-emerald-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                Live
-              </span>
+              <div class="live-summary" aria-live="polite">
+                <span class="live-dot" aria-hidden="true"></span>
+                <div>
+                  <strong id="liveServerCount">0 / 3 online</strong>
+                  <span id="livePlayerTotal">Atualizando...</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -848,14 +1284,17 @@
       </section>
     </main>
 
-    <section id="shops" class="store-dock store-dock-shell p-3">
-      <div class="flex flex-col justify-between gap-2 md:flex-row md:items-center">
-        <div>
-          <p class="text-xs font-black uppercase text-sky-300" data-i18n="storesKicker">Acesso rápido</p>
-          <h2 class="mt-1 text-xl font-black text-white" data-i18n="shopTitle">Lojas oficiais</h2>
+    <section id="shops" class="store-section">
+      <div class="store-dock store-dock-shell p-3">
+        <div class="flex flex-col justify-between gap-2 md:flex-row md:items-center">
+          <div>
+            <p class="text-xs font-black uppercase text-sky-300" data-i18n="storesKicker">Acesso rápido</p>
+            <h2 class="mt-1 text-xl font-black text-white" data-i18n="shopTitle">Lojas oficiais</h2>
+            <p class="mt-2 max-w-xs text-xs font-semibold leading-relaxed text-zinc-500" data-i18n="shopIntro">Escolha sua região e acesse a loja oficial correspondente.</p>
+          </div>
         </div>
+        <div id="shopButtons" class="store-grid"></div>
       </div>
-      <div id="shopButtons" class="store-grid"></div>
     </section>
   </div>
 
@@ -959,6 +1398,7 @@
         name: "US - Masters 10X PVE",
         region: "US",
         ip: "23.26.121.202:30015",
+        queryPort: 30017,
         bmId: "39453496",
         storeKey: "us",
         store: "https://10xmastersus.craftingstore.net/",
@@ -969,6 +1409,7 @@
         name: "EU - Masters 10X PVE",
         region: "EU",
         ip: "178.208.177.73:31015",
+        queryPort: 31017,
         bmId: "39866636",
         storeKey: "eu",
         store: "https://10xmasterseu.craftingstore.net/",
@@ -979,6 +1420,7 @@
         name: "BR LATAM - Masters 10X PVE",
         region: "BR LATAM",
         ip: "177.138.84.236:28015",
+        queryPort: 28017,
         bmId: "33357999",
         storeKey: "br",
         store: "https://themasters.craftingstore.net/",
@@ -1006,9 +1448,10 @@
         seeServers: "Ver servidores",
         officialStores: "Lojas oficiais",
         liveTitle: "Servidores ao vivo",
-        liveText: "Status público via BattleMetrics.",
+        liveText: "Status direto dos servidores, atualizado periodicamente.",
         storesKicker: "Acesso rápido",
         shopTitle: "Lojas oficiais",
+        shopIntro: "Escolha sua região e acesse a loja oficial correspondente.",
         openStore: "Abrir loja",
         officialStore: "Loja oficial do servidor",
         storeServer: "servidor",
@@ -1063,9 +1506,10 @@
         seeServers: "View servers",
         officialStores: "Official stores",
         liveTitle: "Live servers",
-        liveText: "Public status from BattleMetrics.",
+        liveText: "Direct server status, updated periodically.",
         storesKicker: "Quick access",
         shopTitle: "Official stores",
+        shopIntro: "Choose your region and open its official store.",
         openStore: "Open store",
         officialStore: "Official server store",
         storeServer: "server",
@@ -1120,9 +1564,10 @@
         seeServers: "Ver servidores",
         officialStores: "Tiendas oficiales",
         liveTitle: "Servidores en vivo",
-        liveText: "Estado público vía BattleMetrics.",
+        liveText: "Estado directo de los servidores, actualizado periódicamente.",
         storesKicker: "Acceso rápido",
         shopTitle: "Tiendas oficiales",
+        shopIntro: "Elige tu región y abre su tienda oficial.",
         openStore: "Abrir tienda",
         officialStore: "Tienda oficial del servidor",
         storeServer: "servidor",
@@ -1215,28 +1660,74 @@
       return Array.from(stores.values());
     }
 
-    async function fetchBM(bmId, signal) {
-      const response = await fetch(`https://api.battlemetrics.com/servers/${bmId}`, { cache: "no-store", signal });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
+    const STATUS_API = "https://api.gamequery.net/api/query/rust";
+    const STATUS_CACHE_KEY = "mastersServerStatusV1";
+    const STATUS_POLL_MS = 10 * 60 * 1000;
+
+    function serverHost(server) {
+      return server.ip.replace(/:\d+$/, "");
+    }
+
+    function loadCachedStatus() {
+      try {
+        const cached = JSON.parse(localStorage.getItem(STATUS_CACHE_KEY) || "{}");
+        SERVERS.forEach((server) => {
+          const entry = cached[server.bmId];
+          if (!entry || !Number.isFinite(entry.players) || !Number.isFinite(entry.max)) return;
+          server.players = entry.players;
+          server.max = entry.max;
+          server.realname = entry.realname || server.name;
+          server.status = entry.status === "offline" ? "offline" : "online";
+          server.hasLiveData = true;
+        });
+      } catch {
+        localStorage.removeItem(STATUS_CACHE_KEY);
+      }
+    }
+
+    function saveCachedStatus() {
+      const cached = {};
+      SERVERS.forEach((server) => {
+        if (!server.hasLiveData) return;
+        cached[server.bmId] = {
+          players: server.players,
+          max: server.max,
+          realname: server.realname || server.name,
+          status: server.status,
+          savedAt: Date.now()
+        };
+      });
+      localStorage.setItem(STATUS_CACHE_KEY, JSON.stringify(cached));
+    }
+
+    async function fetchServerStatus(server, signal) {
+      const host = encodeURIComponent(serverHost(server));
+      const response = await fetch(`${STATUS_API}/${host}/${server.queryPort}`, {
+        cache: "no-store",
+        signal
+      });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok || json.status === "error") {
+        throw new Error(json.error || `HTTP ${response.status}`);
+      }
+      return json;
     }
 
     async function updatePlayerCounts(controller) {
       await Promise.all(SERVERS.map(async (server) => {
         try {
-          const json = await fetchBM(server.bmId, controller?.signal);
-          const attrs = json.data?.attributes || {};
-          server.players = attrs.players ?? 0;
-          server.max = attrs.maxPlayers ?? 0;
-          server.realname = attrs.name || server.name;
-          server.status = attrs.status || "online";
+          const json = await fetchServerStatus(server, controller?.signal);
+          server.players = Number(json.players?.online) || 0;
+          server.max = Number(json.players?.max) || 0;
+          server.realname = json.name || server.name;
+          server.status = json.status === "online" ? "online" : "offline";
+          server.hasLiveData = true;
         } catch {
-          server.players = server.players;
-          server.max = server.max;
           server.realname = server.realname || server.name;
-          server.status = server.status || "syncing";
+          server.status = server.hasLiveData ? server.status : "syncing";
         }
       }));
+      saveCachedStatus();
     }
 
     function renderShops() {
@@ -1245,7 +1736,7 @@
       const stores = storeList();
       wrap.style.setProperty("--store-count", stores.length);
       wrap.innerHTML = stores.map((store) => `
-        <a href="${esc(store.store)}" target="_blank" rel="noopener noreferrer" class="shop-card store-card group grid grid-cols-[1fr_auto] items-center gap-3 p-3" aria-label="${esc(t.openStore)} - ${esc(store.name)}">
+        <a href="${esc(store.store)}" target="_blank" rel="noopener noreferrer" class="shop-card store-card group grid grid-cols-[1fr_auto] items-center gap-3 p-3" data-region="${esc(store.region)}" aria-label="${esc(t.openStore)} - ${esc(store.name)}">
           <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
               <h3 class="text-lg font-black text-white">${esc(store.name)}</h3>
@@ -1268,8 +1759,8 @@
       wrap.innerHTML = SERVERS.map((server) => {
         const status = statusInfo(server, t);
         return `
-          <article class="server-card compact overflow-hidden" data-server-card="${esc(server.bmId)}">
-            <div class="server-media">
+          <article class="server-card compact overflow-hidden" data-server-card="${esc(server.bmId)}" data-region="${esc(server.region)}">
+            <div class="server-media" data-region="${esc(server.region)}">
               <img src="${esc(server.banner)}" alt="${esc(server.name)} banner" />
               <div class="absolute left-4 right-4 top-4 z-10 flex items-center justify-between gap-3">
                 <span class="chip">${esc(server.region)}</span>
@@ -1300,6 +1791,7 @@
               <div class="mt-3 flex flex-wrap gap-3">
                 <a href="${esc(server.store)}" target="_blank" rel="noopener noreferrer" class="btn btn-store server-store-action" aria-label="${esc(t.openStore)} - ${esc(server.name)}">
                   <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                  <span>${esc(t.openStore)}</span>
                 </a>
                 <button type="button" class="btn btn-muted" data-info-id="${esc(server.bmId)}">
                   <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
@@ -1363,6 +1855,13 @@
           node.className = `status-pill ${status.className}`;
         });
       });
+      const onlineServers = SERVERS.filter((server) => server.status === "online").length;
+      const knownServers = SERVERS.filter((server) => server.status === "online" || server.status === "offline").length;
+      const totalPlayers = SERVERS.reduce((total, server) => total + (Number.isFinite(server.players) ? server.players : 0), 0);
+      const liveServerCount = document.getElementById("liveServerCount");
+      const livePlayerTotal = document.getElementById("livePlayerTotal");
+      if (liveServerCount) liveServerCount.textContent = `${onlineServers} / ${knownServers || SERVERS.length} ${t.online}`;
+      if (livePlayerTotal) livePlayerTotal.textContent = knownServers ? `${totalPlayers} ${t.players}` : t.syncing;
     }
 
     function renderAll() {
@@ -1420,12 +1919,13 @@
       modal.classList.add("flex");
 
       try {
-        const json = await fetchBM(server.bmId);
-        const attrs = json.data?.attributes || {};
-        server.players = attrs.players ?? server.players ?? 0;
-        server.max = attrs.maxPlayers ?? server.max ?? 0;
-        server.realname = attrs.name || server.realname || server.name;
-        server.status = attrs.status || server.status || "online";
+        const json = await fetchServerStatus(server);
+        server.players = Number(json.players?.online) || 0;
+        server.max = Number(json.players?.max) || 0;
+        server.realname = json.name || server.realname || server.name;
+        server.status = json.status === "online" ? "online" : "offline";
+        server.hasLiveData = true;
+        saveCachedStatus();
         document.getElementById("modalTitle").textContent = server.realname || server.name;
         document.getElementById("playerCount").textContent = playerText(server, t);
         updateDynamicUI();
@@ -1504,9 +2004,15 @@
         link.href = DISCORD_URL;
       });
 
+      loadCachedStatus();
       renderAll();
       const controller = new AbortController();
-      await updatePlayerCounts(controller);
+      const initialTimeout = setTimeout(() => controller.abort(), 20000);
+      try {
+        await updatePlayerCounts(controller);
+      } finally {
+        clearTimeout(initialTimeout);
+      }
       renderAll();
 
       setInterval(async () => {
@@ -1518,7 +2024,7 @@
         } finally {
           clearTimeout(timeout);
         }
-      }, 30000);
+      }, STATUS_POLL_MS);
     })();
   </script>
 </body>

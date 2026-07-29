@@ -1277,8 +1277,19 @@
       font-size: 1rem;
     }
 
-    .server-card-actions .btn-muted {
+    .server-card-actions {
+      display: grid;
+      gap: 8px;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .server-card-actions .server-store-action {
       width: 100%;
+    }
+
+    .server-card-actions .btn-muted {
+      width: auto;
+      padding-inline: .85rem;
     }
 
     .store-section {
@@ -1614,7 +1625,7 @@
         ip: "23.26.121.202:30015",
         queryPort: 30017,
         bmId: "39453496",
-        botId: "master-br",
+        botId: "master-us",
         storeKey: "us",
         store: "https://10xmastersus.craftingstore.net/",
         tier: "10X",
@@ -1638,7 +1649,7 @@
         ip: "177.138.84.236:28015",
         queryPort: 28017,
         bmId: "33357999",
-        botId: "master-us",
+        botId: "master-br",
         storeKey: "br",
         store: "https://themasters.craftingstore.net/",
         tier: "10X",
@@ -2011,6 +2022,10 @@
               </div>
 
               <div class="server-card-actions mt-3">
+                <a href="${esc(server.store)}" target="_blank" rel="noopener noreferrer" class="btn btn-store server-store-action" aria-label="${esc(t.openStore)} - ${esc(server.name)}">
+                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+                  <span>${esc(t.openStore)}</span>
+                </a>
                 <button type="button" class="btn btn-muted" data-info-id="${esc(server.bmId)}">
                   <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                   ${esc(t.info)}

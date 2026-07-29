@@ -1203,6 +1203,220 @@
       .store-dock-shell { width: 100%; margin: 0; }
       .server-card.compact .server-store-action { flex: 1 1 150px; width: auto; }
     }
+
+    /* Mesmo arranjo regional e rodapé fixo usado no Rust Valley. */
+    .hero-bg {
+      padding-bottom: 112px;
+    }
+
+    .server-region-groups {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .server-region-group {
+      --region-accent: #34d399;
+      --region-rgb: 52, 211, 153;
+      min-width: 0;
+    }
+
+    .server-region-group[data-region="US"] {
+      --region-accent: #38bdf8;
+      --region-rgb: 56, 189, 248;
+    }
+
+    .server-region-group[data-region="EU"] {
+      --region-accent: #a78bfa;
+      --region-rgb: 167, 139, 250;
+    }
+
+    .region-heading {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 0 3px 12px;
+    }
+
+    .region-mark {
+      width: 9px;
+      height: 9px;
+      flex: 0 0 auto;
+      border-radius: 999px;
+      background: var(--region-accent);
+      box-shadow: 0 0 0 5px rgba(var(--region-rgb), .09), 0 0 20px rgba(var(--region-rgb), .45);
+    }
+
+    .region-heading h2 {
+      color: #f8fafc;
+      font-size: .94rem;
+      font-weight: 950;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .region-heading span:last-child {
+      margin-left: auto;
+      color: #717b78;
+      font-size: .68rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    .region-server-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .server-card.compact > .p-4 {
+      padding: 16px;
+    }
+
+    .server-card.compact .server-title {
+      min-height: 2.8rem;
+      font-size: 1rem;
+    }
+
+    .server-card-actions .btn-muted {
+      width: 100%;
+    }
+
+    .store-section {
+      position: fixed;
+      z-index: 35;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 8px 16px 10px;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(3, 5, 6, .92) 24%, #050708 100%);
+    }
+
+    .store-dock-shell {
+      width: min(1500px, 100%);
+      margin: 0 auto;
+      pointer-events: auto;
+      border-radius: 17px;
+      box-shadow: 0 -18px 55px rgba(0, 0, 0, .48);
+    }
+
+    .store-dock {
+      gap: 12px;
+      grid-template-columns: 190px minmax(0, 1fr);
+      border-radius: 17px;
+      padding: 8px !important;
+    }
+
+    .store-dock > div:first-child {
+      padding: 2px 8px;
+    }
+
+    .store-dock > div:first-child [data-i18n="storesKicker"],
+    .store-dock > div:first-child [data-i18n="shopIntro"] {
+      font-size: .62rem;
+    }
+
+    .store-dock > div:first-child h2 {
+      margin-top: 2px;
+      font-size: 1rem;
+    }
+
+    .store-dock > div:first-child [data-i18n="shopIntro"] {
+      margin-top: 3px;
+      line-height: 1.25;
+    }
+
+    .store-grid {
+      gap: 7px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .store-card {
+      min-height: 68px;
+      align-items: center !important;
+      gap: 8px !important;
+      grid-template-columns: minmax(0, 1fr) auto !important;
+      padding: 8px 9px !important;
+      border-radius: 12px;
+    }
+
+    .store-card::after,
+    .store-card p {
+      display: none;
+    }
+
+    .store-card h3 {
+      font-size: .82rem;
+    }
+
+    .store-card .chip {
+      padding: .25rem .4rem;
+      font-size: .58rem;
+    }
+
+    .store-card .btn {
+      width: auto;
+      min-width: 92px;
+      min-height: 38px;
+      padding: .5rem .62rem;
+      font-size: .7rem;
+    }
+
+    @media (max-width: 980px) {
+      .server-region-groups {
+        grid-template-columns: 1fr;
+      }
+
+      .store-dock > div:first-child {
+        display: none;
+      }
+
+      .store-dock {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero-bg {
+        padding-bottom: 142px;
+      }
+
+      .store-section {
+        padding: 6px 8px 8px;
+      }
+
+      .store-dock {
+        padding: 7px !important;
+      }
+
+      .store-grid {
+        display: grid;
+        overflow-x: auto;
+        grid-auto-columns: minmax(168px, 72vw);
+        grid-auto-flow: column;
+        grid-template-columns: none;
+        padding-bottom: 2px;
+        scrollbar-width: thin;
+        scroll-snap-type: x proximity;
+      }
+
+      .store-card {
+        min-height: 66px;
+        scroll-snap-align: start;
+      }
+
+      .store-card .btn {
+        width: 40px;
+        min-width: 40px;
+        padding: 0;
+        font-size: 0;
+      }
+
+      .store-card .btn svg:last-child {
+        display: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1400,6 +1614,7 @@
         ip: "23.26.121.202:30015",
         queryPort: 30017,
         bmId: "39453496",
+        botId: "master-br",
         storeKey: "us",
         store: "https://10xmastersus.craftingstore.net/",
         tier: "10X",
@@ -1411,6 +1626,7 @@
         ip: "178.208.177.73:31015",
         queryPort: 31017,
         bmId: "39866636",
+        botId: "master-eu",
         storeKey: "eu",
         store: "https://10xmasterseu.craftingstore.net/",
         tier: "10X",
@@ -1422,6 +1638,7 @@
         ip: "177.138.84.236:28015",
         queryPort: 28017,
         bmId: "33357999",
+        botId: "master-us",
         storeKey: "br",
         store: "https://themasters.craftingstore.net/",
         tier: "10X",
@@ -1660,13 +1877,10 @@
       return Array.from(stores.values());
     }
 
-    const STATUS_API = "https://api.gamequery.net/api/query/rust";
-    const STATUS_CACHE_KEY = "mastersServerStatusV1";
-    const STATUS_POLL_MS = 10 * 60 * 1000;
-
-    function serverHost(server) {
-      return server.ip.replace(/:\d+$/, "");
-    }
+    const BOT_STATUS_API = "http://themasters.dyndns.org:4288/api/public/bot-status/masters";
+    const STATUS_CACHE_KEY = "mastersBotStatusV1";
+    const STATUS_POLL_MS = 60 * 1000;
+    const STATUS_REQUEST_TIMEOUT_MS = 15000;
 
     function loadCachedStatus() {
       try {
@@ -1700,34 +1914,38 @@
       localStorage.setItem(STATUS_CACHE_KEY, JSON.stringify(cached));
     }
 
-    async function fetchServerStatus(server, signal) {
-      const host = encodeURIComponent(serverHost(server));
-      const response = await fetch(`${STATUS_API}/${host}/${server.queryPort}`, {
-        cache: "no-store",
-        signal
-      });
-      const json = await response.json().catch(() => ({}));
-      if (!response.ok || json.status === "error") {
-        throw new Error(json.error || `HTTP ${response.status}`);
-      }
-      return json;
-    }
-
-    async function updatePlayerCounts(controller) {
-      await Promise.all(SERVERS.map(async (server) => {
-        try {
-          const json = await fetchServerStatus(server, controller?.signal);
-          server.players = Number(json.players?.online) || 0;
-          server.max = Number(json.players?.max) || 0;
-          server.realname = json.name || server.name;
-          server.status = json.status === "online" ? "online" : "offline";
-          server.hasLiveData = true;
-        } catch {
-          server.realname = server.realname || server.name;
-          server.status = server.hasLiveData ? server.status : "syncing";
+    async function updatePlayerCounts() {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), STATUS_REQUEST_TIMEOUT_MS);
+      try {
+        const response = await fetch(BOT_STATUS_API, { cache: "no-store", signal: controller.signal });
+        const payload = await response.json().catch(() => ({}));
+        if (!response.ok || !payload.ok || !Array.isArray(payload.servers)) {
+          throw new Error(payload.error || `HTTP ${response.status}`);
         }
-      }));
-      saveCachedStatus();
+        const byId = new Map(payload.servers.map((entry) => [String(entry.id), entry]));
+        let updated = 0;
+        SERVERS.forEach((server) => {
+          const entry = byId.get(server.botId);
+          if (!entry || !Number.isFinite(entry.players) || !Number.isFinite(entry.maxPlayers)) return;
+          server.players = entry.players;
+          server.max = entry.maxPlayers;
+          server.realname = entry.hostname || server.name;
+          server.status = entry.online === false ? "offline" : "online";
+          server.hasLiveData = true;
+          updated += 1;
+        });
+        if (updated !== SERVERS.length) throw new Error("Resposta incompleta do bot de status");
+        saveCachedStatus();
+        updateDynamicUI();
+      } catch {
+        SERVERS.forEach((server) => {
+          if (!server.hasLiveData) server.status = "syncing";
+        });
+        updateDynamicUI();
+      } finally {
+        clearTimeout(timeout);
+      }
     }
 
     function renderShops() {
@@ -1756,7 +1974,11 @@
     function renderServers() {
       const t = currentText();
       const wrap = document.getElementById("serverGrid");
-      wrap.innerHTML = SERVERS.map((server) => {
+      const regionOrder = ["BR LATAM", "US", "EU"];
+      wrap.className = "server-region-groups";
+      wrap.innerHTML = regionOrder.map((region) => {
+        const regionServers = SERVERS.filter((server) => server.region === region);
+        const cards = regionServers.map((server) => {
         const status = statusInfo(server, t);
         return `
           <article class="server-card compact overflow-hidden" data-server-card="${esc(server.bmId)}" data-region="${esc(server.region)}">
@@ -1788,11 +2010,7 @@
                 <p class="mt-2 text-sm font-black text-zinc-300" data-player-text="${esc(server.bmId)}">${esc(playerText(server, t))}</p>
               </div>
 
-              <div class="mt-3 flex flex-wrap gap-3">
-                <a href="${esc(server.store)}" target="_blank" rel="noopener noreferrer" class="btn btn-store server-store-action" aria-label="${esc(t.openStore)} - ${esc(server.name)}">
-                  <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
-                  <span>${esc(t.openStore)}</span>
-                </a>
+              <div class="server-card-actions mt-3">
                 <button type="button" class="btn btn-muted" data-info-id="${esc(server.bmId)}">
                   <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                   ${esc(t.info)}
@@ -1800,6 +2018,17 @@
               </div>
             </div>
           </article>
+        `;
+        }).join("");
+        return `
+          <section class="server-region-group" data-region="${esc(region)}" aria-labelledby="region-${esc(region.replace(/\s+/g, "-").toLowerCase())}">
+            <div class="region-heading">
+              <span class="region-mark" aria-hidden="true"></span>
+              <h2 id="region-${esc(region.replace(/\s+/g, "-").toLowerCase())}">${esc(region)}</h2>
+              <span>${esc(regionServers.length)} ${esc(regionServers.length === 1 ? t.storeServer : t.storeServers)}</span>
+            </div>
+            <div class="region-server-grid">${cards}</div>
+          </section>
         `;
       }).join("");
       updateDynamicUI();
@@ -1919,16 +2148,9 @@
       modal.classList.add("flex");
 
       try {
-        const json = await fetchServerStatus(server);
-        server.players = Number(json.players?.online) || 0;
-        server.max = Number(json.players?.max) || 0;
-        server.realname = json.name || server.realname || server.name;
-        server.status = json.status === "online" ? "online" : "offline";
-        server.hasLiveData = true;
-        saveCachedStatus();
+        await updatePlayerCounts();
         document.getElementById("modalTitle").textContent = server.realname || server.name;
         document.getElementById("playerCount").textContent = playerText(server, t);
-        updateDynamicUI();
       } catch {
         document.getElementById("playerCount").textContent = playerText(server, t);
       }

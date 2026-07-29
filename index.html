@@ -1877,7 +1877,7 @@
       return Array.from(stores.values());
     }
 
-    const BOT_STATUS_API = "http://themasters.dyndns.org:4288/api/public/bot-status/masters";
+    const BOT_STATUS_API = "https://raw.githubusercontent.com/gjpardal/masters/main/status-masters.json";
     const STATUS_CACHE_KEY = "mastersBotStatusV1";
     const STATUS_POLL_MS = 60 * 1000;
     const STATUS_REQUEST_TIMEOUT_MS = 15000;
@@ -1918,7 +1918,7 @@
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), STATUS_REQUEST_TIMEOUT_MS);
       try {
-        const response = await fetch(BOT_STATUS_API, { cache: "no-store", signal: controller.signal });
+        const response = await fetch(`${BOT_STATUS_API}?v=${Date.now()}`, { cache: "no-store", signal: controller.signal });
         const payload = await response.json().catch(() => ({}));
         if (!response.ok || !payload.ok || !Array.isArray(payload.servers)) {
           throw new Error(payload.error || `HTTP ${response.status}`);

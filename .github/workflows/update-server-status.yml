@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: masters-server-status
+  group: rust-server-status
   cancel-in-progress: true
 
 jobs:
@@ -19,40 +19,63 @@ jobs:
       - name: Baixar o site
         uses: actions/checkout@v4
 
-      - name: Consultar o bot de status
+      - name: Consultar os bots de status
         shell: bash
         run: |
           set -euo pipefail
-          curl \
-            --fail \
-            --show-error \
-            --silent \
-            --retry 3 \
-            --connect-timeout 10 \
-            --max-time 30 \
-            "http://themasters.dyndns.org:4288/api/public/bot-status/masters" \
-            --output status-masters.tmp.json
+          fetch_status() {
+            local network="$1"
+            local expected="$2"
+            local output="$3"
+            local temporary="${output}.tmp"
 
-          jq -e '
-            .ok == true
-            and .source == "discord-status-bot"
-            and (.servers | type == "array")
-            and (.servers | length == 3)
-          ' status-masters.tmp.json > /dev/null
+            curl \
+              --fail \
+              --show-error \
+              --silent \
+              --retry 3 \
+              --connect-timeout 10 \
+              --max-time 30 \
+              "http://themasters.dyndns.org:4288/api/public/bot-status/${network}" \
+              --output "${temporary}"
 
-          jq '.' status-masters.tmp.json > status-masters.json
-          rm status-masters.tmp.json
+            jq -e \
+              --argjson expected "${expected}" \
+              '.ok == true
+               and .source == "discord-status-bot"
+               and (.servers | type == "array")
+               and (.servers | length == $expected)' \
+              "${temporary}" > /dev/null
+
+            jq '{
+              ok,
+              network,
+              source,
+              servers: [.servers[] | {
+                id,
+                online,
+                players,
+                maxPlayers,
+                hostname
+              }]
+            }' "${temporary}" > "${output}"
+
+            rm "${temporary}"
+          }
+
+          fetch_status "masters" 3 "status-masters.json"
+          fetch_status "rustvalley" 9 "status-valley.json"
 
       - name: Publicar somente quando houver mudança
         shell: bash
         run: |
-          if git diff --quiet -- status-masters.json; then
+          if git diff --quiet -- status-masters.json status-valley.json; then
             echo "Nenhuma alteração no status."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add status-masters.json
+          git add status-masters.json status-valley.json
           git commit -m "Atualiza status dos servidores"
           git push

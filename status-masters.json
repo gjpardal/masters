@@ -2,15 +2,15 @@
   "ok": true,
   "network": "masters",
   "source": "discord-status-bot",
-  "checkedAt": "2026-07-29T23:11:41.394Z",
+  "checkedAt": "2026-07-30T00:12:12.872Z",
   "servers": [
     {
       "id": "master-br",
       "online": true,
-      "players": 21,
+      "players": 16,
       "maxPlayers": 50,
       "hostname": "[BR/LATAM] MASTERS | 10X PVE++ |ARMAS LENDÁRIAS|EPIC TOOLS|",
-      "checkedAt": "2026-07-29T23:11:28.295Z"
+      "checkedAt": "2026-07-30T00:12:06.879Z"
     },
     {
       "id": "master-eu",
@@ -18,15 +18,15 @@
       "players": 2,
       "maxPlayers": 100,
       "hostname": "[EU] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | EPIC TOOLS",
-      "checkedAt": "2026-07-29T23:11:20.903Z"
+      "checkedAt": "2026-07-30T00:12:18.190Z"
     },
     {
       "id": "master-us",
       "online": true,
-      "players": 0,
+      "players": 1,
       "maxPlayers": 100,
       "hostname": "[US] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | RAIDABLE BASES | LOOT++",
-      "checkedAt": "2026-07-29T23:11:29.480Z"
+      "checkedAt": "2026-07-30T00:12:17.859Z"
     }
   ]
 }

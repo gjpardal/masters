@@ -13,14 +13,14 @@
     {
       "id": "master-eu",
       "online": true,
-      "players": 4,
+      "players": 6,
       "maxPlayers": 100,
       "hostname": "[EU] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | EPIC TOOLS"
     },
     {
       "id": "master-us",
       "online": true,
-      "players": 1,
+      "players": 0,
       "maxPlayers": 100,
       "hostname": "[US] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | RAIDABLE BASES | LOOT++"
     }

@@ -29,7 +29,7 @@ jobs:
             local output="$3"
             local temporary="${output}.tmp"
 
-            curl \
+            if ! curl \
               --fail \
               --show-error \
               --silent \
@@ -37,15 +37,21 @@ jobs:
               --connect-timeout 10 \
               --max-time 30 \
               "http://themasters.dyndns.org:4288/api/public/bot-status/${network}" \
-              --output "${temporary}"
+              --output "${temporary}"; then
+              rm -f "${temporary}"
+              return 1
+            fi
 
-            jq -e \
+            if ! jq -e \
               --argjson expected "${expected}" \
               '.ok == true
                and .source == "discord-status-bot"
                and (.servers | type == "array")
                and (.servers | length == $expected)' \
-              "${temporary}" > /dev/null
+              "${temporary}" > /dev/null; then
+              rm -f "${temporary}"
+              return 1
+            fi
 
             jq '{
               ok,
@@ -64,7 +70,9 @@ jobs:
           }
 
           fetch_status "masters" 3 "status-masters.json"
-          fetch_status "rustvalley" 9 "status-valley.json"
+          if ! fetch_status "rustvalley" 9 "status-valley.json"; then
+            echo "::warning::Valley incompleto; mantendo o último status válido sem bloquear o Masters."
+          fi
 
       - name: Publicar somente quando houver mudança
         shell: bash

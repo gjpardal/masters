@@ -70,7 +70,7 @@ jobs:
           }
 
           fetch_status "masters" 3 "status-masters.json"
-          if ! fetch_status "rustvalley" 9 "status-valley.json"; then
+          if ! fetch_status "rustvalley" 10 "status-valley.json"; then
             echo "::warning::Valley incompleto; mantendo o último status válido sem bloquear o Masters."
           fi
 

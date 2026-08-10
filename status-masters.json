@@ -6,7 +6,7 @@
     {
       "id": "master-br",
       "online": true,
-      "players": 17,
+      "players": 10,
       "maxPlayers": 100,
       "hostname": "[BR/LATAM] MASTERS | 10X PVE++ |ARMAS LENDÁRIAS|EPIC TOOLS|"
     },
@@ -20,7 +20,7 @@
     {
       "id": "master-us",
       "online": true,
-      "players": 2,
+      "players": 0,
       "maxPlayers": 100,
       "hostname": "[US] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | RAIDABLE BASES | LOOT++"
     }

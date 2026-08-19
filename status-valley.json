@@ -6,14 +6,14 @@
     {
       "id": "rv-br-pve-10x",
       "online": true,
-      "players": 25,
+      "players": 21,
       "maxPlayers": 100,
       "hostname": "[BR/LATAM] RustValley 10x PVE+ |Armas Lendarias| Raidable Bases| Loot +++"
     },
     {
       "id": "rv-br-pve-10x-2",
       "online": true,
-      "players": 4,
+      "players": 3,
       "maxPlayers": 100,
       "hostname": "[BR/LATAM] RustValley 10x #2 PVE+ |Armas Lendarias| Raidable Bases| Loot +++"
     },
@@ -27,14 +27,14 @@
     {
       "id": "rv-eu-pve-10x-2",
       "online": true,
-      "players": 25,
+      "players": 22,
       "maxPlayers": 100,
       "hostname": "[EU] RustValley 10x PVE |#2| Legendary Weapons|RaidableBases"
     },
     {
       "id": "rv-eu-pve-10x-3",
       "online": true,
-      "players": 8,
+      "players": 9,
       "maxPlayers": 100,
       "hostname": "[EU] RustValley 10x PVE |#3| Legendary Weapons|RaidableBases"
     },
@@ -55,7 +55,7 @@
     {
       "id": "rv-us-pve-10x-2",
       "online": true,
-      "players": 4,
+      "players": 5,
       "maxPlayers": 100,
       "hostname": "[US] RustValley 10X |#2| PVE+|Legendary Weapons|RaidableBase|LOOT ++"
     },

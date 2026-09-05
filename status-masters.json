@@ -6,14 +6,14 @@
     {
       "id": "master-br",
       "online": true,
-      "players": 22,
+      "players": 8,
       "maxPlayers": 100,
       "hostname": "[BR/LATAM] MASTERS | 10X PVE++ |ARMAS LENDÁRIAS|EPIC TOOLS|"
     },
     {
       "id": "master-eu",
       "online": true,
-      "players": 2,
+      "players": 6,
       "maxPlayers": 100,
       "hostname": "[EU] MASTERS | 10X PVE++ | LEGENDARY WEAPONS | EPIC TOOLS"
     },

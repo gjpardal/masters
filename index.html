@@ -1709,13 +1709,13 @@
         storeServers: "servidores",
         serversKicker: "Rust PvE",
         serversTitle: "Servidores",
-        serversIntro: "Status do bot com consulta automática a cada 15 segundos.",
+        serversIntro: "Consulta automática a cada 15 segundos, com segunda verificação quando necessário.",
         players: "players",
         syncing: "Atualizando",
         stale: "Sem atualização",
         pending: "aguardando confirmação",
         lastKnown: "última contagem conhecida",
-        checked: "Bot verificou às",
+        checked: "Verificado às",
         refresh: "Atualizar agora",
         online: "Online",
         offline: "Offline",
@@ -1772,13 +1772,13 @@
         storeServers: "servers",
         serversKicker: "Rust PvE",
         serversTitle: "Servers",
-        serversIntro: "Bot status checked automatically every 15 seconds.",
+        serversIntro: "Automatic checks every 15 seconds, with a second verification when needed.",
         players: "players",
         syncing: "Syncing",
         stale: "Update unavailable",
         pending: "awaiting confirmation",
         lastKnown: "last known count",
-        checked: "Bot checked at",
+        checked: "Verified at",
         refresh: "Refresh now",
         online: "Online",
         offline: "Offline",
@@ -1835,13 +1835,13 @@
         storeServers: "servidores",
         serversKicker: "Rust PvE",
         serversTitle: "Servidores",
-        serversIntro: "Estado del bot con consulta automática cada 15 segundos.",
+        serversIntro: "Consulta automática cada 15 segundos, con una segunda verificación cuando sea necesario.",
         players: "jugadores",
         syncing: "Actualizando",
         stale: "Sin actualización",
         pending: "esperando confirmación",
         lastKnown: "último recuento conocido",
-        checked: "El bot verificó a las",
+        checked: "Verificado a las",
         refresh: "Actualizar ahora",
         online: "Online",
         offline: "Offline",
@@ -1938,7 +1938,11 @@
       { name: "cors.io", prefix: "https://cors.io/?url=", format: "body" },
       { name: "allOrigins", prefix: "https://api.allorigins.win/get?url=", format: "contents" }
     ];
-    const STATUS_CACHE_KEY = "mastersBotStatusV4";
+    const GAMEQUERY_STATUS_API = "https://api.gamequery.net/api/query/rust";
+    const QUERY_BUDGET_KEY = "mastersGameQueryBudgetV1";
+    // O serviço anônimo permite 3 consultas/minuto e 30/hora por IP.
+    const QUERY_RECHECK_MS = 2 * 60 * 1000;
+    const STATUS_CACHE_KEY = "mastersBotStatusV5";
     const STATUS_POLL_MS = 15 * 1000;
     const STATUS_DATA_MAX_AGE_MS = 3 * 60 * 1000;
     const STATUS_CACHE_TTL_MS = 2 * 60 * 1000;
@@ -1948,6 +1952,7 @@
     let statusTimer = null;
     let lastStatusFetchAt = 0;
     let activeModalServerId = null;
+    let queryBudget = { calls: [], nextById: {}, blockedUntil: 0 };
 
     // Preferências e cache são opcionais; o site funciona com armazenamento bloqueado.
     function storageGet(key) {
@@ -1978,6 +1983,13 @@
           server.stale = true;
           server.fetchedAt = entry.savedAt;
           server.checkedAt = entry.checkedAt;
+          server.source = entry.source === "query" ? "query" : "bot";
+          if (server.source === "query" && server.status === "online") {
+            server.querySnapshot = {
+              players: server.players, max: server.max, realname: server.realname,
+              status: "online", checkedAt: server.checkedAt, source: "query", stale: false
+            };
+          }
         });
       } catch {
         // Cache inválido nunca impede a consulta à fonte.
@@ -1994,7 +2006,8 @@
           realname: server.realname || server.name,
           status: server.status,
           savedAt: server.fetchedAt,
-          checkedAt: server.checkedAt
+          checkedAt: server.checkedAt,
+          source: server.source
         };
       });
       storageSet(STATUS_CACHE_KEY, JSON.stringify(cached));
@@ -2029,6 +2042,7 @@
           realname: typeof entry.hostname === "string" && entry.hostname.trim() ? entry.hostname : server.name,
           status: entry.online ? "online" : "offline",
           checkedAt,
+          source: "bot",
           stale: Date.now() - checkedAt > STATUS_DATA_MAX_AGE_MS
         };
       });
@@ -2068,6 +2082,100 @@
       throw lastError;
     }
 
+    function reserveQuery(server) {
+      const now = Date.now();
+      try {
+        const saved = JSON.parse(storageGet(QUERY_BUDGET_KEY) || "null");
+        if (saved && Array.isArray(saved.calls) && saved.nextById && typeof saved.nextById === "object") {
+          queryBudget = saved;
+        }
+      } catch { /* Use o limite desta sessão quando o armazenamento estiver bloqueado. */ }
+      queryBudget.calls = queryBudget.calls.filter((time) => Number.isFinite(time) && time > now - 3600000 && time <= now);
+      if (now < (Number(queryBudget.blockedUntil) || 0) ||
+          now < (Number(queryBudget.nextById[server.botId]) || 0) ||
+          queryBudget.calls.length >= 30 ||
+          queryBudget.calls.filter((time) => time > now - 60000).length >= 3) return false;
+      queryBudget.calls.push(now);
+      queryBudget.nextById[server.botId] = now + QUERY_RECHECK_MS;
+      storageSet(QUERY_BUDGET_KEY, JSON.stringify(queryBudget));
+      return true;
+    }
+
+    function freshQuerySnapshot(server) {
+      const entry = server.querySnapshot;
+      return entry && Number.isFinite(entry.checkedAt) &&
+        entry.checkedAt <= Date.now() + 60000 && Date.now() - entry.checkedAt <= STATUS_DATA_MAX_AGE_MS
+        ? entry : null;
+    }
+
+    async function recoverServerByQuery(server, signal) {
+      const host = server.ip.split(":")[0];
+      const attempt = new AbortController();
+      const abortAttempt = () => attempt.abort();
+      signal.addEventListener("abort", abortAttempt, { once: true });
+      if (signal.aborted) attempt.abort();
+      const deadline = setTimeout(abortAttempt, STATUS_RELAY_TIMEOUT_MS);
+      try {
+        const response = await fetch(`${GAMEQUERY_STATUS_API}/${host}/${server.queryPort}?v=${Date.now()}`, {
+          cache: "no-store", credentials: "omit", signal: attempt.signal
+        });
+        if (response.status === 429) {
+          const retryAfter = response.headers?.get("Retry-After");
+          const seconds = Number(retryAfter);
+          const retryAt = Number.isFinite(seconds) && seconds > 0
+            ? Date.now() + seconds * 1000 : Date.parse(retryAfter);
+          queryBudget.blockedUntil = Number.isFinite(retryAt) ? retryAt : Date.now() + QUERY_RECHECK_MS;
+          storageSet(QUERY_BUDGET_KEY, JSON.stringify(queryBudget));
+          throw new Error("Limite temporário da segunda verificação");
+        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const payload = await response.json();
+        const checkedAt = Date.parse(payload.queried_at);
+        if (payload.status !== "online" || payload.game !== "rust" ||
+            payload.host !== host || Number(payload.port) !== server.queryPort ||
+            !Number.isInteger(payload.players?.online) || payload.players.online < 0 ||
+            !Number.isInteger(payload.players?.max) || payload.players.max <= 0 ||
+            !Number.isFinite(checkedAt) || checkedAt > Date.now() + 60000 ||
+            Date.now() - checkedAt > STATUS_DATA_MAX_AGE_MS) {
+          throw new Error("Segunda verificação sem resposta atual do servidor");
+        }
+        return {
+          players: payload.players.online, max: payload.players.max,
+          realname: typeof payload.name === "string" && payload.name.trim() ? payload.name : server.name,
+          status: "online", checkedAt, source: "query", stale: false
+        };
+      } finally {
+        clearTimeout(deadline);
+        signal.removeEventListener("abort", abortAttempt);
+      }
+    }
+
+    async function recoverUnconfirmedServers(entries, signal) {
+      const results = entries.map((entry) => ({ ...entry }));
+      const recoveries = [];
+      SERVERS.forEach((server, index) => {
+        const botEntry = entries[index];
+        const needsQuery = botEntry.stale || botEntry.status !== "online";
+        const previousQuery = freshQuerySnapshot(server);
+        // Uma falha do bot não invalida uma consulta direta positiva e recente.
+        if (previousQuery && (needsQuery || previousQuery.checkedAt > botEntry.checkedAt)) {
+          results[index] = { ...previousQuery };
+        }
+        if (!needsQuery || signal.aborted || !reserveQuery(server)) return;
+        recoveries.push((async () => {
+          try {
+            const recovered = await recoverServerByQuery(server, signal);
+            server.querySnapshot = recovered;
+            results[index] = recovered;
+          } catch (error) {
+            console.warn(`Segunda verificação indisponível (${server.region}):`, error.message);
+          }
+        })());
+      });
+      await Promise.all(recoveries);
+      return results;
+    }
+
     function updatePlayerCounts() {
       // Modal, botão e atualização automática compartilham a mesma consulta.
       if (statusRequest) return statusRequest;
@@ -2078,11 +2186,23 @@
         const refreshButton = document.getElementById("refreshStatus");
         if (refreshButton) refreshButton.disabled = true;
         try {
-          const entries = await fetchLiveStatus(controller.signal);
+          let entries;
+          try {
+            entries = await fetchLiveStatus(controller.signal);
+          } catch (error) {
+            console.warn("Consulta ao bot indisponível:", error.message);
+            entries = SERVERS.map((server) => ({
+              players: server.players, max: server.max, realname: server.realname || server.name,
+              status: server.status || "syncing", checkedAt: server.checkedAt,
+              source: server.source || "bot", stale: Boolean(server.hasLiveData)
+            }));
+          }
+          entries = await recoverUnconfirmedServers(entries, controller.signal);
           lastStatusFetchAt = Date.now();
           SERVERS.forEach((server, index) => {
             Object.assign(server, entries[index], {
-              hasLiveData: true, fetchedAt: lastStatusFetchAt
+              hasLiveData: Number.isFinite(entries[index].players) && Number.isFinite(entries[index].max),
+              fetchedAt: lastStatusFetchAt
             });
           });
           saveCachedStatus();

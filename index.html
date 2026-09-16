@@ -930,6 +930,25 @@
       animation: livePulse 2.4s ease-in-out infinite;
     }
 
+    .live-summary[data-state="syncing"] .live-dot,
+    .live-summary[data-state="stale"] .live-dot {
+      background: #fbbf24;
+      box-shadow: 0 0 0 5px rgba(251,191,36,.09);
+      animation: none;
+    }
+
+    .refresh-status {
+      flex: 0 0 auto;
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      color: #a7f3d0;
+      cursor: pointer;
+    }
+
+    .refresh-status:disabled { opacity: .45; cursor: wait; }
+
     .live-summary strong,
     .live-summary span {
       display: block;
@@ -1492,12 +1511,16 @@
                 </div>
                 <p class="mt-1 max-w-2xl text-xs font-bold leading-5 text-zinc-400" data-i18n="serversIntro">Status ao vivo, conexão rápida e loja sempre à mão.</p>
               </div>
-              <div class="live-summary" aria-live="polite">
+              <div class="live-summary" data-state="syncing" aria-live="polite">
                 <span class="live-dot" aria-hidden="true"></span>
                 <div>
-                  <strong id="liveServerCount">0 / 3 online</strong>
+                  <strong id="liveServerCount">Consultando servidores...</strong>
                   <span id="livePlayerTotal">Atualizando...</span>
+                  <span id="liveUpdateTime"></span>
                 </div>
+                <button type="button" id="refreshStatus" class="refresh-status" aria-label="Atualizar agora" title="Atualizar agora">
+                  <svg class="h-4 w-4 mx-auto" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2 6"/><path d="M20 4v7h-7"/></svg>
+                </button>
               </div>
             </div>
           </div>
@@ -1686,9 +1709,14 @@
         storeServers: "servidores",
         serversKicker: "Rust PvE",
         serversTitle: "Servidores",
-        serversIntro: "Status ao vivo, conexão rápida e loja sempre à mão.",
+        serversIntro: "Status do bot com consulta automática a cada 15 segundos.",
         players: "players",
         syncing: "Atualizando",
+        stale: "Sem atualização",
+        pending: "aguardando confirmação",
+        lastKnown: "última contagem conhecida",
+        checked: "Bot verificou às",
+        refresh: "Atualizar agora",
         online: "Online",
         offline: "Offline",
         region: "Região",
@@ -1744,9 +1772,14 @@
         storeServers: "servers",
         serversKicker: "Rust PvE",
         serversTitle: "Servers",
-        serversIntro: "Live status, quick connection and store always at hand.",
+        serversIntro: "Bot status checked automatically every 15 seconds.",
         players: "players",
         syncing: "Syncing",
+        stale: "Update unavailable",
+        pending: "awaiting confirmation",
+        lastKnown: "last known count",
+        checked: "Bot checked at",
+        refresh: "Refresh now",
         online: "Online",
         offline: "Offline",
         region: "Region",
@@ -1802,9 +1835,14 @@
         storeServers: "servidores",
         serversKicker: "Rust PvE",
         serversTitle: "Servidores",
-        serversIntro: "Estado en vivo, conexión rápida y tienda siempre a mano.",
+        serversIntro: "Estado del bot con consulta automática cada 15 segundos.",
         players: "jugadores",
         syncing: "Actualizando",
+        stale: "Sin actualización",
+        pending: "esperando confirmación",
+        lastKnown: "último recuento conocido",
+        checked: "El bot verificó a las",
+        refresh: "Actualizar ahora",
         online: "Online",
         offline: "Offline",
         region: "Región",
@@ -1854,19 +1892,23 @@
     }
 
     function statusInfo(server, t) {
+      if (server.stale) return { label: t.stale, className: "status-sync" };
       if (server.status === "online") return { label: t.online, className: "status-online" };
       if (server.status === "offline") return { label: t.offline, className: "status-offline" };
       return { label: t.syncing, className: "status-sync" };
     }
 
     function playerPercent(server) {
+      if (server.stale) return 0;
       if (!Number.isFinite(server.players) || !Number.isFinite(server.max) || server.max <= 0) return 0;
       return Math.max(0, Math.min(100, (server.players / server.max) * 100));
     }
 
     function playerText(server, t) {
       if (!Number.isFinite(server.players) || !Number.isFinite(server.max)) return t.syncing;
-      return `${server.players} / ${server.max} ${t.players}`;
+      if (server.status === "offline" && server.max === 0) return server.stale ? t.stale : t.offline;
+      const count = `${server.players} / ${server.max} ${t.players}`;
+      return server.stale ? `${count} · ${t.lastKnown}` : count;
     }
 
     function storeList() {
@@ -1888,25 +1930,57 @@
       return Array.from(stores.values());
     }
 
-    const BOT_STATUS_API = "https://cdn.jsdelivr.net/gh/gjpardal/masters@main/status-masters.json";
-    const STATUS_CACHE_KEY = "mastersBotStatusV1";
-    const STATUS_POLL_MS = 60 * 1000;
+    // GitHub Pages: todo o código do site está neste arquivo.
+    // O bot atual fornece HTTP; as pontes públicas retornam seus dados por HTTPS.
+    // Não consultar arquivos de status publicados no GitHub nem serviços locais.
+    const BOT_STATUS_API = "http://themasters.dyndns.org:4288/api/public/bot-status/masters";
+    const STATUS_RELAYS = [
+      { name: "cors.io", prefix: "https://cors.io/?url=", format: "body" },
+      { name: "allOrigins", prefix: "https://api.allorigins.win/get?url=", format: "contents" }
+    ];
+    const STATUS_CACHE_KEY = "mastersBotStatusV4";
+    const STATUS_POLL_MS = 15 * 1000;
+    const STATUS_DATA_MAX_AGE_MS = 3 * 60 * 1000;
+    const STATUS_CACHE_TTL_MS = 2 * 60 * 1000;
     const STATUS_REQUEST_TIMEOUT_MS = 15000;
+    const STATUS_RELAY_TIMEOUT_MS = 6500;
+    let statusRequest = null;
+    let statusTimer = null;
+    let lastStatusFetchAt = 0;
+    let activeModalServerId = null;
+
+    // Preferências e cache são opcionais; o site funciona com armazenamento bloqueado.
+    function storageGet(key) {
+      try { return localStorage.getItem(key); } catch { return null; }
+    }
+
+    function storageSet(key, value) {
+      try { localStorage.setItem(key, value); } catch { /* Sem cache persistente. */ }
+    }
 
     function loadCachedStatus() {
       try {
-        const cached = JSON.parse(localStorage.getItem(STATUS_CACHE_KEY) || "{}");
+        const cached = JSON.parse(storageGet(STATUS_CACHE_KEY) || "{}");
         SERVERS.forEach((server) => {
           const entry = cached[server.bmId];
-          if (!entry || !Number.isFinite(entry.players) || !Number.isFinite(entry.max)) return;
+          if (!entry || !Number.isInteger(entry.players) || entry.players < 0 ||
+              !Number.isInteger(entry.max) || entry.max < 0 ||
+              !["online", "offline"].includes(entry.status) ||
+              (entry.status === "online" && entry.max === 0) ||
+              !Number.isFinite(entry.savedAt) || entry.savedAt > Date.now() ||
+              !Number.isFinite(entry.checkedAt) ||
+              Date.now() - entry.savedAt > STATUS_CACHE_TTL_MS) return;
           server.players = entry.players;
           server.max = entry.max;
           server.realname = entry.realname || server.name;
-          server.status = entry.status === "offline" ? "offline" : "online";
+          server.status = entry.status;
           server.hasLiveData = true;
+          server.stale = true;
+          server.fetchedAt = entry.savedAt;
+          server.checkedAt = entry.checkedAt;
         });
       } catch {
-        localStorage.removeItem(STATUS_CACHE_KEY);
+        // Cache inválido nunca impede a consulta à fonte.
       }
     }
 
@@ -1919,44 +1993,119 @@
           max: server.max,
           realname: server.realname || server.name,
           status: server.status,
-          savedAt: Date.now()
+          savedAt: server.fetchedAt,
+          checkedAt: server.checkedAt
         };
       });
-      localStorage.setItem(STATUS_CACHE_KEY, JSON.stringify(cached));
+      storageSet(STATUS_CACHE_KEY, JSON.stringify(cached));
     }
 
-    async function updatePlayerCounts() {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), STATUS_REQUEST_TIMEOUT_MS);
-      try {
-        const response = await fetch(`${BOT_STATUS_API}?v=${Date.now()}`, { cache: "no-store", signal: controller.signal });
-        const payload = await response.json().catch(() => ({}));
-        if (!response.ok || !payload.ok || !Array.isArray(payload.servers)) {
-          throw new Error(payload.error || `HTTP ${response.status}`);
-        }
-        const byId = new Map(payload.servers.map((entry) => [String(entry.id), entry]));
-        let updated = 0;
-        SERVERS.forEach((server) => {
-          const entry = byId.get(server.botId);
-          if (!entry || !Number.isFinite(entry.players) || !Number.isFinite(entry.maxPlayers)) return;
-          server.players = entry.players;
-          server.max = entry.maxPlayers;
-          server.realname = entry.hostname || server.name;
-          server.status = entry.online === false ? "offline" : "online";
-          server.hasLiveData = true;
-          updated += 1;
-        });
-        if (updated !== SERVERS.length) throw new Error("Resposta incompleta do bot de status");
-        saveCachedStatus();
-        updateDynamicUI();
-      } catch {
-        SERVERS.forEach((server) => {
-          if (!server.hasLiveData) server.status = "syncing";
-        });
-        updateDynamicUI();
-      } finally {
-        clearTimeout(timeout);
+    function validateStatusPayload(payload) {
+      if (!payload || payload.ok !== true || payload.source !== "discord-status-bot" ||
+          payload.network !== "masters" || !Array.isArray(payload.servers)) {
+        throw new Error("Resposta inválida do bot de status");
       }
+      const byId = new Map();
+      payload.servers.forEach((entry) => {
+        if (!entry || typeof entry.id !== "string" || byId.has(entry.id)) {
+          throw new Error("Identificador inválido ou duplicado no status");
+        }
+        byId.set(entry.id, entry);
+      });
+      // Valide todos antes de alterar qualquer card ou contador.
+      return SERVERS.map((server) => {
+        const entry = byId.get(server.botId);
+        const checkedAt = Date.parse(entry?.checkedAt || payload.checkedAt);
+        if (!entry || typeof entry.online !== "boolean" ||
+            !Number.isInteger(entry.players) || entry.players < 0 ||
+            !Number.isInteger(entry.maxPlayers) || entry.maxPlayers < 0 ||
+            (entry.online && entry.maxPlayers === 0) ||
+            !Number.isFinite(checkedAt) || checkedAt > Date.now() + 60000) {
+          throw new Error("Resposta incompleta ou inválida do bot de status");
+        }
+        return {
+          players: entry.online ? entry.players : 0,
+          max: entry.maxPlayers,
+          realname: typeof entry.hostname === "string" && entry.hostname.trim() ? entry.hostname : server.name,
+          status: entry.online ? "online" : "offline",
+          checkedAt,
+          stale: Date.now() - checkedAt > STATUS_DATA_MAX_AGE_MS
+        };
+      });
+    }
+
+    async function fetchLiveStatus(signal) {
+      const targetUrl = `${BOT_STATUS_API}?v=${Date.now()}`;
+      let lastError = new Error("Status ao vivo indisponível");
+      for (const relay of STATUS_RELAYS) {
+        if (signal.aborted) throw lastError;
+        const attempt = new AbortController();
+        const abortAttempt = () => attempt.abort();
+        signal.addEventListener("abort", abortAttempt, { once: true });
+        const deadline = setTimeout(abortAttempt, STATUS_RELAY_TIMEOUT_MS);
+        try {
+          const response = await fetch(`${relay.prefix}${encodeURIComponent(targetUrl)}`, {
+            cache: "no-store", credentials: "omit", signal: attempt.signal,
+            headers: { Accept: "application/json" }
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const wrapper = await response.json();
+          const upstreamStatus = relay.format === "body" ? wrapper.status : wrapper.status?.http_code;
+          const contents = wrapper[relay.format];
+          if (upstreamStatus !== 200 || typeof contents !== "string") {
+            throw new Error(`Resposta inválida de ${relay.name}`);
+          }
+          const entries = validateStatusPayload(JSON.parse(contents));
+          if (entries.every((entry) => entry.stale)) throw new Error("Verificações antigas do bot");
+          return entries;
+        } catch (error) {
+          lastError = error;
+        } finally {
+          clearTimeout(deadline);
+          signal.removeEventListener("abort", abortAttempt);
+        }
+      }
+      throw lastError;
+    }
+
+    function updatePlayerCounts() {
+      // Modal, botão e atualização automática compartilham a mesma consulta.
+      if (statusRequest) return statusRequest;
+      updateDynamicUI();
+      statusRequest = (async () => {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), STATUS_REQUEST_TIMEOUT_MS);
+        const refreshButton = document.getElementById("refreshStatus");
+        if (refreshButton) refreshButton.disabled = true;
+        try {
+          const entries = await fetchLiveStatus(controller.signal);
+          lastStatusFetchAt = Date.now();
+          SERVERS.forEach((server, index) => {
+            Object.assign(server, entries[index], {
+              hasLiveData: true, fetchedAt: lastStatusFetchAt
+            });
+          });
+          saveCachedStatus();
+        } catch (error) {
+          SERVERS.forEach((server) => {
+            server.stale = Boolean(server.hasLiveData);
+            if (!server.hasLiveData) server.status = "syncing";
+          });
+          console.warn("Não foi possível atualizar o status dos servidores:", error.message);
+        } finally {
+          clearTimeout(timeout);
+          if (refreshButton) refreshButton.disabled = false;
+          updateDynamicUI();
+        }
+      })().finally(() => { statusRequest = null; });
+      return statusRequest;
+    }
+
+    async function refreshStatus() {
+      clearTimeout(statusTimer);
+      await updatePlayerCounts();
+      clearTimeout(statusTimer);
+      if (!document.hidden) statusTimer = setTimeout(refreshStatus, STATUS_POLL_MS);
     }
 
     function renderShops() {
@@ -2019,6 +2168,7 @@
               <div class="mt-3">
                 <div class="bar-track"><div class="bar-fill" data-player-bar="${esc(server.bmId)}"></div></div>
                 <p class="mt-2 text-sm font-black text-zinc-300" data-player-text="${esc(server.bmId)}">${esc(playerText(server, t))}</p>
+                <p class="mt-1 text-xs text-zinc-400" data-status-checked="${esc(server.bmId)}"></p>
               </div>
 
               <div class="server-card-actions mt-3">
@@ -2082,7 +2232,11 @@
 
     function updateDynamicUI() {
       const t = currentText();
+      const locale = { pt: "pt-BR", en: "en-US", es: "es-ES" }[currentLang()];
       SERVERS.forEach((server) => {
+        if (server.hasLiveData && (!Number.isFinite(server.checkedAt) || Date.now() - server.checkedAt > STATUS_DATA_MAX_AGE_MS)) {
+          server.stale = true;
+        }
         const status = statusInfo(server, t);
         const percent = playerPercent(server);
         document.querySelectorAll(`[data-server-title="${server.bmId}"]`).forEach((node) => {
@@ -2090,6 +2244,10 @@
         });
         document.querySelectorAll(`[data-player-text="${server.bmId}"]`).forEach((node) => {
           node.textContent = playerText(server, t);
+        });
+        document.querySelectorAll(`[data-status-checked="${server.bmId}"]`).forEach((node) => {
+          node.textContent = Number.isFinite(server.checkedAt)
+            ? `${t.checked} ${new Date(server.checkedAt).toLocaleTimeString(locale)}` : "";
         });
         document.querySelectorAll(`[data-player-bar="${server.bmId}"]`).forEach((node) => {
           requestAnimationFrame(() => { node.style.width = `${percent.toFixed(1)}%`; });
@@ -2099,13 +2257,33 @@
           node.className = `status-pill ${status.className}`;
         });
       });
-      const onlineServers = SERVERS.filter((server) => server.status === "online").length;
-      const knownServers = SERVERS.filter((server) => server.status === "online" || server.status === "offline").length;
-      const totalPlayers = SERVERS.reduce((total, server) => total + (Number.isFinite(server.players) ? server.players : 0), 0);
+      const confirmedServers = SERVERS.filter((server) => !server.stale && ["online", "offline"].includes(server.status));
+      const onlineServers = confirmedServers.filter((server) => server.status === "online").length;
+      const pendingServers = SERVERS.length - confirmedServers.length;
+      const totalPlayers = confirmedServers.reduce((total, server) => total + (server.status === "online" ? server.players : 0), 0);
       const liveServerCount = document.getElementById("liveServerCount");
       const livePlayerTotal = document.getElementById("livePlayerTotal");
-      if (liveServerCount) liveServerCount.textContent = `${onlineServers} / ${knownServers || SERVERS.length} ${t.online}`;
-      if (livePlayerTotal) livePlayerTotal.textContent = knownServers ? `${totalPlayers} ${t.players}` : t.syncing;
+      if (liveServerCount) liveServerCount.textContent = confirmedServers.length
+        ? `${onlineServers} / ${SERVERS.length} ${t.online}${pendingServers ? ` · ${pendingServers} ${t.pending}` : ""}`
+        : (SERVERS.some((server) => server.stale) ? t.stale : t.syncing);
+      if (livePlayerTotal) livePlayerTotal.textContent = confirmedServers.length ? `${totalPlayers} ${t.players}` : t.pending;
+      const liveUpdateTime = document.getElementById("liveUpdateTime");
+      const sourceTimes = SERVERS.filter((server) => Number.isFinite(server.checkedAt)).map((server) => server.checkedAt);
+      if (liveUpdateTime) liveUpdateTime.textContent = sourceTimes.length
+        ? `${t.checked} ${new Date(Math.min(...sourceTimes)).toLocaleTimeString(locale)}` : "";
+      const summary = document.querySelector(".live-summary");
+      if (summary) summary.dataset.state = pendingServers ? (SERVERS.some((server) => server.stale) ? "stale" : "syncing") : "fresh";
+      const refreshButton = document.getElementById("refreshStatus");
+      if (refreshButton) {
+        refreshButton.title = t.refresh;
+        refreshButton.setAttribute("aria-label", t.refresh);
+      }
+      const modalServer = SERVERS.find((server) => server.bmId === activeModalServerId);
+      if (modalServer) {
+        document.getElementById("modalTitle").textContent = modalServer.realname || modalServer.name;
+        document.getElementById("playerCount").textContent = playerText(modalServer, t);
+        document.getElementById("modalSub").textContent = `${t.tierLabel} - ${modalServer.region}`;
+      }
     }
 
     function renderAll() {
@@ -2149,6 +2327,7 @@
     async function openModal(id) {
       const server = SERVERS.find((item) => item.bmId === id);
       if (!server) return;
+      activeModalServerId = id;
       const t = currentText();
       document.getElementById("modalImg").src = server.banner;
       document.getElementById("modalTitle").textContent = server.realname || server.name;
@@ -2162,16 +2341,11 @@
       modal.classList.remove("hidden");
       modal.classList.add("flex");
 
-      try {
-        await updatePlayerCounts();
-        document.getElementById("modalTitle").textContent = server.realname || server.name;
-        document.getElementById("playerCount").textContent = playerText(server, t);
-      } catch {
-        document.getElementById("playerCount").textContent = playerText(server, t);
-      }
+      await updatePlayerCounts();
     }
 
     function closeModal() {
+      activeModalServerId = null;
       const modal = document.getElementById("infoModal");
       modal.classList.add("hidden");
       modal.classList.remove("flex");
@@ -2228,13 +2402,24 @@
     });
 
     document.getElementById("lang").addEventListener("change", (event) => {
-      localStorage.setItem("mastersLang", event.target.value);
+      storageSet("mastersLang", event.target.value);
       renderAll();
-      updateDynamicUI();
     });
 
-    (async () => {
-      const savedLang = localStorage.getItem("mastersLang");
+    document.getElementById("refreshStatus").addEventListener("click", refreshStatus);
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) clearTimeout(statusTimer);
+      else refreshStatus();
+    });
+    window.addEventListener("focus", refreshStatus);
+    window.addEventListener("online", refreshStatus);
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted) refreshStatus();
+    });
+
+    (() => {
+      const savedLang = storageGet("mastersLang");
       if (savedLang && I18N[savedLang]) document.getElementById("lang").value = savedLang;
 
       document.querySelectorAll('a[href="https://discord.gg/the-masters"]').forEach((link) => {
@@ -2243,25 +2428,7 @@
 
       loadCachedStatus();
       renderAll();
-      const controller = new AbortController();
-      const initialTimeout = setTimeout(() => controller.abort(), 20000);
-      try {
-        await updatePlayerCounts(controller);
-      } finally {
-        clearTimeout(initialTimeout);
-      }
-      renderAll();
-
-      setInterval(async () => {
-        const pollingController = new AbortController();
-        const timeout = setTimeout(() => pollingController.abort(), 10000);
-        try {
-          await updatePlayerCounts(pollingController);
-          updateDynamicUI();
-        } finally {
-          clearTimeout(timeout);
-        }
-      }, STATUS_POLL_MS);
+      refreshStatus();
     })();
   </script>
 </body>
